@@ -1,8 +1,6 @@
 import pandas as pd
 import numpy as np
 from sklearn import linear_model
-#from sklearn import metrics, preprocessing, linear_model
-#from sklearn.ensemble import RandomForestClassifier
 
 
 def main():
@@ -22,8 +20,6 @@ def main():
     x_test = test_data.drop('Id', axis=1)
 
     # This is your model that will learn to predict
-    #model = linear_model.LogisticRegression(n_jobs=-1, solver='liblinear')
-    #model = RandomForestClassifier(n_estimators=10, n_jobs=-1)
     #model = linear_model.LinearRegression(n_jobs=-1)
     alphas = np.logspace(-5, 10, 2)
     model = linear_model.RidgeCV(alphas, cv=10)
@@ -38,7 +34,6 @@ def main():
     # We are just interested in the probability that the target is 1.
     y_prediction = model.predict(x_test)
     #y_prediction = [np.average(x) for x in np.asarray(X)]
-    #results = y_prediction[:, 1]
     results = y_prediction
     results_df = pd.DataFrame(data={'y':results})
     joined = pd.DataFrame(t_id).join(results_df)
@@ -46,7 +41,6 @@ def main():
     print("Writing predictions to predictions.csv")
     # Save the predictions out to a CSV file
     joined.to_csv("predictions.csv", index=False)
-    # Now you can upload these predictions on numer.ai
 
 
 if __name__ == '__main__':
