@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn import linear_model
+from sklearn.metrics import mean_squared_error
 
 
 def main():
@@ -20,13 +21,18 @@ def main():
     x_test = test_data.drop('Id', axis=1)
 
     # This is your model that will learn to predict
-    #model = linear_model.LinearRegression(n_jobs=-1)
-    alphas = np.logspace(-5, 10, 2)
-    model = linear_model.RidgeCV(alphas, cv=10)
+    model = linear_model.LinearRegression(n_jobs=-1)
+    alphas = np.logspace(-15, 100, 100)
+    #model = linear_model.RidgeCV(alphas, cv=10)
 
     print("Training...")
     # Your model is trained on the numerai_training_data
     model.fit(X, Y)
+
+    print
+
+    RMSE = mean_squared_error(Y, model.predict(X))**0.5
+    print RMSE
 
     print("Predicting...")
     # Your trained model is now used to make predictions on the numerai_tournament_data
