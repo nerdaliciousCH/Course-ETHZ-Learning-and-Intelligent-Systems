@@ -29,7 +29,6 @@ def main():
     # Your model is trained on the numerai_training_data
     model.fit(X, Y)
 
-    print
 
     RMSE = mean_squared_error(Y, model.predict(X))**0.5
     print RMSE
