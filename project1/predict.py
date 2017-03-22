@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn import linear_model
 from sklearn.metrics import mean_squared_error
+from sklearn.preprocessing import normalize
 
 
 def main():
@@ -22,13 +23,12 @@ def main():
 
     # This is your model that will learn to predict
     model = linear_model.LinearRegression(n_jobs=-1)
-    alphas = np.logspace(-15, 100, 100)
+    #alphas = np.logspace(-15, 100, 100)
     #model = linear_model.RidgeCV(alphas, cv=10)
 
     print("Training...")
     # Your model is trained on the numerai_training_data
     model.fit(X, Y)
-
 
     RMSE = mean_squared_error(Y, model.predict(X))**0.5
     print RMSE
@@ -38,6 +38,10 @@ def main():
     # The model returns two columns: [probability of 0, probability of 1]
     # We are just interested in the probability that the target is 1.
     y_prediction = model.predict(x_test)
+
+    y_prediction = normalize(np.average(x_test, axis=1)[:,np.newaxis], axis=0).ravel()
+    RMSE = mean_squared_error(Y, np.average(X, axis=1))**0.5
+    print RMSE
     #y_prediction = [np.average(x) for x in np.asarray(X)]
     results = y_prediction
     results_df = pd.DataFrame(data={'y':results})
