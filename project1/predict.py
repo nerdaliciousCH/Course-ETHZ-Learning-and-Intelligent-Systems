@@ -21,7 +21,7 @@ def main():
     t_id = test_data['Id']
     x_test = test_data.drop('Id', axis=1)
 
-    # Exclude a internal trein set
+    # Exclude a internal train set
     idx = range(len(ID))
     np.random.shuffle(idx)
 
