@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn import linear_model, grid_search, svm
 from sklearn.metrics import mean_squared_error
+from sklearn.cross_validation import train_test_split
 from sklearn.preprocessing import normalize
 
 
@@ -21,23 +22,8 @@ def main():
     t_id = test_data['Id']
     x_test = test_data.drop('Id', axis=1)
 
-    # Exclude a internal train set
-    idx = range(len(ID))
-    np.random.shuffle(idx)
-
-    border = int(len(idx) * 0.9)
-    validation_idx = idx[border:]
-    idx = idx[:border]
-
-    X = np.array(X)
-
-    validation_x = X[validation_idx]
-    validation_id = ID[validation_idx]
-    validation_y = Y[validation_idx]
-
-    train_X = X[[idx]]
-    train_Y = Y[idx]
-    train_id = ID[idx]
+    # split for validation testing
+    x_train, x_validate, y_train, y_validate = train_test_split(X, Y)
 
     #X = normalize(X, axis=0)
     #x_test = normalize(x_test, axis=0)
@@ -56,14 +42,16 @@ def main():
     #model = svm.SVR(kernel='poly', degree=5, gamma='auto', coef0=0.0, tol=0.001, C=1.0, epsilon=0.1, shrinking=True, cache_size=200, verbose=False, max_iter=-1)
 
     print("Training...")
-    model.fit(train_X, train_Y)
+    model.fit(x_train, y_train)
 
     best_estimator = model.best_estimator_
 
     print 'Best score of Grid Search: ' + str(model.best_score_)
     print 'Best params of Grid Search: ' + str(model.best_params_)
 
-    RMSE = mean_squared_error(validation_y, model.predict(validation_x))**0.5
+    # print mean squared error as first estimate
+    RMSE = mean_squared_error(y_validate, model.predict(x_validate))**0.5
+    print "Root median square error:"
     print RMSE
 
     # Train on entire Set
