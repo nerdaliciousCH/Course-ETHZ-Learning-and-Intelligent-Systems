@@ -65,3 +65,5 @@ pred_rf100 = clf_rf100.predict(x_test)
 # compute & output AUC
 print "AUC for radom forest classifier, 100 trees"
 print roc_auc_score(y_test, pred_rf100)
+
+# TODO: potentially implemented additional classifier for higher certainty
