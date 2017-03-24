@@ -8,12 +8,17 @@
 
 open util/boolean
 
-// possible that airport code is equal to booking id
+// possible that airport code is equal to booking ID
 sig string {}
 
-sig Aircraft { }
+sig Aircraft {
+	seats: some Seats
+}
 
-sig Airline { }
+sig Airline {
+	name: one string,
+	aircrafts: set Aircraft
+}
 
 sig Airport {
 	code: one string
@@ -23,25 +28,27 @@ fact unique_airport_code {
 	all A1, A2: Airport | A1 != A2 => A1.code != A2.code
 }
 
-some sig Booking {
+sig Booking {
 	ID: one string,
 	passengers: some Passenger,
 	category: one Class,
 	flights: some Flight
+}{
+	(no f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] && isBefore[getArrival[f2], getArrival[f1]])
+	//&& (no f1, f2: flights | getDeparture[f1] = getDeparture[f2]) // for some reason not equivalent to line XX)1
 }
-//fact {
-//	all b: Booking | all f1, f2: b.flights| f1.departure_time != f2.departure_time &&
-//	all b: Booking | all f1, f2: b.flights | f2.departure_time in f1.departure_time.^after
-//							=> f2.arrival_time in f1.arrival_time.^after && f2.departure_time in f1.arrival_time.^after
-//}
+fact ordered_flights_booking {
+	(no b: Booking | no f1, f2: b.flights | getDeparture[f1] = getDeparture[f2]) && // XX)1
+	(no b: Booking | no f1, f2: b.flights | getArrival[f1] = getDeparture[f2])
+}
 
 fact unique_booking_id{
 	all B1, B2: Booking | B1 != B2 => B1.ID != B2.ID
 }
 
-//sig RoundTrip extends Booking { }{
-	//first, last: flights | first.departure_time not in (flights - first).*departure_time
-//}
+sig RoundTrip extends Booking { }{
+	getOrigin[getFirstFlight[this]] = getDestination[getLastFlight[this]]
+}
 
 abstract sig Class { }
 one sig First_Class extends Class {}
@@ -68,18 +75,21 @@ sig Passenger {
 	bookings: set Booking
 }
 
-sig Seat { }
+abstract sig Seat { }
+sig EconomySeat extends Seat {}
+sig BusinessSeat extends EconomySeat {}
+sig FirstClassSeat extends BusinessSeat{}
 
 sig Time {
-	after: lone Time
+	after: lone Time // lone, because we have a end in the timeline
 }
 fact {
-	one t: Time | Time = t.*after &&
-	all t1, t2: Time | isBefore[t1, t2] => not isBefore[t2, t1]
-//	all t1, t2: Time | t1 in t2.^after => t2 not in t1.^after
+	// The next two lines together ensure, that the time is a totally ordered list
+	(one t: Time | Time = t.*after) && // ensures that all times have a common predecessor
+	all t1, t2: Time | isBefore[t1, t2] => not isBefore[t2, t1] // ensures no cicles exist in the timeline
 }
 
-pred show{one b:Booking | #(b.flights) > 1 && some f1, f2: Flight | f1.departure_time != f2.departure_time}
+pred show{one b:Booking | #(b.flights) > 1}
 run show
 
 /*
@@ -88,7 +98,7 @@ run show
 
 // True iff t1 is strictly before t2.
 pred isBefore[t1, t2: Time] {
-	t2 in t1.^after
+	t2 in t1.^after // Since time is totally ordered, if not in transitiv closure, first time is before second
 }
 
 /*
@@ -117,14 +127,15 @@ fun getDestination[f: Flight]: Airport {
 
 // Returns the first flight of the given booking.
 fun getFirstFlight[b: Booking]: Flight {
-	one f: b.flights | 
-//{one f: b.flights | all t: (b.flights - f).*departure_time | isBefore[f.departure_time, t]}
+	// only flight in set that has an earlier departure than every other flight in set
+	{f: b.flights | all fl: (b.flights - f) | isBefore[getDeparture[f], getDeparture[fl]]}
 }
 
 // Returns the last flight of the given booking.
-//fun getLastFlight[b: Booking]: Flight {
-
-//}
+fun getLastFlight[b: Booking]: Flight {
+	// only flight in set that has an later departure than every other flight in set
+	{f: b.flights | all fl: (b.flights - f) | isBefore[getDeparture[fl], getDeparture[f]]}
+}
 
 // Returns all seats of the given aircraft. 
 //fun getSeats[a: Aircraft]: set Seat {
