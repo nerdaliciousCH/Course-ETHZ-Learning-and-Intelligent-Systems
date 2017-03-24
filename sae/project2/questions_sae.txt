@@ -1,0 +1,7 @@
+Questions SAE assistants:
+
+
+- Best practices "String/string" --> really just define as signature?
+- Is it ok to change "Class" signature to abstract?
+  --> if yes are we allowed to use enums instead?
+- Does the person doing the booking have to fly with it too?
