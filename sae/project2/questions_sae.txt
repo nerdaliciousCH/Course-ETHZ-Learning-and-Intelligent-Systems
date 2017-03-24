@@ -5,3 +5,4 @@ Questions SAE assistants:
 - Is it ok to change "Class" signature to abstract?
   --> if yes are we allowed to use enums instead?
 - Does the person doing the booking have to fly with it too?
+- Are Airport.code, Airline.name, Booking.ID, etc. unique? Must this be modeled?
