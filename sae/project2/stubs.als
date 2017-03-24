@@ -75,10 +75,11 @@ sig Time {
 }
 fact {
 	one t: Time | Time = t.*after &&
-	all t1, t2: Time | t1 in t2.^after => t2 not in t1.^after
+	all t1, t2: Time | isBefore[t1, t2] => not isBefore[t2, t1]
+//	all t1, t2: Time | t1 in t2.^after => t2 not in t1.^after
 }
 
-pred show{some b: Booking | #(b.flights) = 2}
+pred show{one b:Booking | #(b.flights) > 1 && some f1, f2: Flight | f1.departure_time != f2.departure_time}
 run show
 
 /*
@@ -86,46 +87,67 @@ run show
  */
 
 // True iff t1 is strictly before t2.
-pred isBefore[t1, t2: Time] { ... }
+pred isBefore[t1, t2: Time] {
+	t2 in t1.^after
+}
 
 /*
  * Static model: Functions
  */
 
 // Returns the departure time of the given flight.
-fun getDeparture[f: Flight]: Time { ... }
+fun getDeparture[f: Flight]: Time {
+	f.departure_time
+}
 
 // Returns the arrival time of the given flight.
-fun getArrival[f: Flight]: Time { ... }
+fun getArrival[f: Flight]: Time {
+	f.arrival_time
+}
 
 // Returns the airport the given flight departs from.
-fun getOrigin[f: Flight]: Airport { ... }
+fun getOrigin[f: Flight]: Airport {
+	f.departure_airport
+}
 
 // Returns the destination airport of the given flight. 
-fun getDestination[f: Flight]: Airport { ... }
+fun getDestination[f: Flight]: Airport {
+	f.arrival_airport
+}
 
 // Returns the first flight of the given booking.
-fun getFirstFlight[b: Booking]: Flight { ... }
+fun getFirstFlight[b: Booking]: Flight {
+	one f: b.flights | 
+//{one f: b.flights | all t: (b.flights - f).*departure_time | isBefore[f.departure_time, t]}
+}
 
 // Returns the last flight of the given booking.
-fun getLastFlight[b: Booking]: Flight { ... }
+//fun getLastFlight[b: Booking]: Flight {
+
+//}
 
 // Returns all seats of the given aircraft. 
-fun getSeats[a: Aircraft]: set Seat { ... }
+//fun getSeats[a: Aircraft]: set Seat {
+	
+//}
 
 // Returns all flights for which is given aircraft is used.
-fun getFlights[a: Aircraft]: set Flight { ... }
+//fun getFlights[a: Aircraft]: set Flight {}
 
 // Returns all bookings booked by the given passenger.
-fun getBookings[p: Passenger]: set Booking { ... }
+fun getBookings[p: Passenger]: set Booking {
+	p.bookings
+}
 
 // Returns all flights contained in the given booking.
-fun getFlightsInBooking[b: Booking]: set Flight { ... }
+fun getFlightsInBooking[b: Booking]: set Flight {
+	b.flights
+}
 
 /*
  * Dynamic model: Functions
  */
-
+/*
 // Returns the state which comes after the given state.
 fun getNextState[s: State]: State { ... } 
 
@@ -137,3 +159,4 @@ fun getAircraftLocation[t: Time, ac: Aircraft]: AircraftLocation { ... }
 
 // Returns the time whose state the given State represents.
 fun getTime[s: State]: Time { ... }
+*/
