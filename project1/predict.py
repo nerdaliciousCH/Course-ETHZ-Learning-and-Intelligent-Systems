@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
-from sklearn import linear_model, grid_search, svm
+from sklearn import linear_model, svm
 from sklearn.metrics import mean_squared_error
-from sklearn.cross_validation import train_test_split
 from sklearn.preprocessing import normalize
+from sklearn.model_selection import GridSearchCV, train_test_split
 
 
 def main():
@@ -36,8 +36,8 @@ def main():
 
     #model = linear_model.LassoCV(eps=0.001, n_alphas=1000, alphas=np.logspace(-100, 100, 1000), fit_intercept=True, normalize=False, precompute='auto', max_iter=10000, tol=0.0001, copy_X=True, cv=10, verbose=False, n_jobs=-1, positive=False, random_state=None, selection='cyclic')
 
-    param_grid = [{'C':np.linspace(0.01, 100, 2),  'epsilon':np.linspace(0.01, 100, 2), 'kernel': ['poly'], 'degree':np.linspace(1, 5, 3)}]
-    model = grid_search.GridSearchCV(svm.SVR(), param_grid, cv=10)
+    param_grid = [{'C':np.linspace(0.01, 100, 100),  'epsilon':np.linspace(0.01, 100, 100), 'kernel': ['poly'], 'degree':np.linspace(1, 5, 5)}]
+    model = GridSearchCV(svm.SVR(), param_grid, cv=10, scoring=None, fit_params=None, n_jobs=-1, iid=True, refit=True, verbose=2, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
 
     #model = svm.SVR(kernel='poly', degree=5, gamma='auto', coef0=0.0, tol=0.001, C=1.0, epsilon=0.1, shrinking=True, cache_size=200, verbose=False, max_iter=-1)
 
