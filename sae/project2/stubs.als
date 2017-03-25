@@ -11,6 +11,8 @@ open util/boolean
 // possible that airport code is equal to booking ID
 sig string {}
 
+sig Seats {}
+
 sig Aircraft {
 	seats: some Seats
 }
@@ -86,7 +88,7 @@ sig Time {
 fact {
 	// The next two lines together ensure, that the time is a totally ordered list
 	(one t: Time | Time = t.*after) && // ensures that all times have a common predecessor
-	all t1, t2: Time | isBefore[t1, t2] => not isBefore[t2, t1] // ensures no cicles exist in the timeline
+	all t1, t2: Time | isBefore[t1, t2] => not isBefore[t2, t1] // ensures no cycles exist in the timeline
 }
 
 pred show{one b:Booking | #(b.flights) > 1}
