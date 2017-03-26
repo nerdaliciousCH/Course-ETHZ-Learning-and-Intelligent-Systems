@@ -11,15 +11,18 @@ open util/boolean
 // possible that airport code is equal to booking ID
 sig string {}
 
-sig Seats {}
-
 sig Aircraft {
-	seats: some Seats
+	seats: some Seat,
+	flights: set Flight
+}{
+	(all f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] => isBefore[getArrival[f1], getArrival[f2]]) //&&
+	//(all f1, f2: flights | ) // TODO check whether previous flight lands where next flight takes off
 }
 
 sig Airline {
 	name: one string,
-	aircrafts: set Aircraft
+	aircrafts: set Aircraft,
+	flight_routes: set Flight
 }
 
 sig Airport {
@@ -37,12 +40,14 @@ sig Booking {
 	flights: some Flight
 }{
 	(no f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] && isBefore[getArrival[f2], getArrival[f1]])
-	//&& (no f1, f2: flights | getDeparture[f1] = getDeparture[f2]) // for some reason not equivalent to line XX)1
-}
+	&& (no f1, f2: flights | getDeparture[f1] = getDeparture[f2]) // for some reason not equivalent to line XX)1
+} // TODO shit does not work.. either the prevous line or the line XX)1 need to work..  somehow are both of them overly restrictive
 fact ordered_flights_booking {
-	(no b: Booking | no f1, f2: b.flights | getDeparture[f1] = getDeparture[f2]) && // XX)1
-	(no b: Booking | no f1, f2: b.flights | getArrival[f1] = getDeparture[f2])
+	//(all b: Booking | no f1, f2: b.flights | getDeparture[f1] = getDeparture[f2]) && // XX)1
+	(all b: Booking | no f1, f2: b.flights | getArrival[f1] = getDeparture[f2])
 }
+
+//assert abc {no b: Booking | }
 
 fact unique_booking_id{
 	all B1, B2: Booking | B1 != B2 => B1.ID != B2.ID
@@ -59,6 +64,8 @@ one sig Economy_Class extends Class {}
 
 sig Flight {
 	number: one string,
+	operators: some Airline,
+	aircraft: one Aircraft,
 	bookings: set Booking,
 	departure_time: one Time,
 	arrival_time: one Time,
@@ -70,7 +77,9 @@ sig Flight {
 }
 
 fact {
-	all f: Flight, b: Booking | f in b.flights <=> b in f.bookings
+	(all f: Flight, b: Booking | f in b.flights <=> b in f.bookings) && // ensures that booking which uses this flight is scheduled on the flihgt and vice versa
+	(all f: Flight, o: Airline | f in o.flight_routes <=> o in f.operators) && // ensures that airline which operates a flight, has this flight in flight_routes and vice versa
+	(all f: Flight, a: Aircraft | f in a.flights <=> a in f.aircraft) // ensures that Aircraft which is used for the flight, has this flight in flights and vice versa
 }
 
 sig Passenger {
@@ -140,12 +149,14 @@ fun getLastFlight[b: Booking]: Flight {
 }
 
 // Returns all seats of the given aircraft. 
-//fun getSeats[a: Aircraft]: set Seat {
-	
-//}
+fun getSeats[a: Aircraft]: set Seat {
+	a.seats
+}
 
 // Returns all flights for which is given aircraft is used.
-//fun getFlights[a: Aircraft]: set Flight {}
+fun getFlights[a: Aircraft]: set Flight {
+	a.flights
+}
 
 // Returns all bookings booked by the given passenger.
 fun getBookings[p: Passenger]: set Booking {
