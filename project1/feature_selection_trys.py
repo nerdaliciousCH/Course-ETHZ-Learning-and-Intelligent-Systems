@@ -38,7 +38,7 @@ def main():
     model2.fit(X,Y)
 
     # display the relative importance of each attribute
-    print(model.feature_importances_)
+    print(model2.feature_importances_)
 
 if __name__ == '__main__':
     main()
