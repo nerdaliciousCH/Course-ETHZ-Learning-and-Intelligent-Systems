@@ -8,22 +8,22 @@
 
 // Open questions: One passenger is able to make several bookings flights, that depart at the same time
 
-sig Aircraft {
+sig Aircraft extends PassengerLocation {
 	seats: some Seat,
-	flights: set Flight
+	flights: set Flight,
+	location: one AircraftLocation
 }{
 	all disj f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] => isBefore[getArrival[f1], getDeparture[f2]]
 	no disj f1, f2: flights | getDeparture[f1] = getDeparture[f2]
 	all f: flights | getDestination[f] = getOrigin[getNextFlight[f, flights]] or no getLaterFlights[f, flights]
 }
 
-
 sig Airline {
 	aircrafts: set Aircraft,
 	flight_routes: set Flight
 }
 
-sig Airport { }
+sig Airport extends AircraftLocation { }
 
 sig Booking {
 	passengers: some Passenger,
@@ -61,18 +61,26 @@ fact {
 }
 
 sig Passenger {
-	bookings: set Booking
+	bookings: set Booking,
+	location: one PassengerLocation
 }
 
 abstract sig Seat { }
 sig EconomySeat extends Seat {}
 sig BusinessSeat extends EconomySeat {}
 sig FirstClassSeat extends BusinessSeat{}
+fact { all s: Seat | #{a: Aircraft | s in getSeats[a]} = 1 }
+
+abstract sig Location {}
+abstract sig PassengerLocation extends Location {}
+abstract sig AircraftLocation extends Location {}
+lone sig Unknown extends PassengerLocation {}
+lone sig InAir extends AircraftLocation {}
 
 sig Time { after: lone Time }{ isBefore[this, after]  && !isBefore[after, this] } // ensures no cycles exist in the timeline
 fact { (one t: Time | Time = t.*after) } // ensures that all times have a common predecessor
 
-pred show{some b: Booking | #b.flights > 1}
+pred show {#Unknown = 1}
 run show for 4
 
 /*
