@@ -84,6 +84,23 @@ fact { (one t: Time | Time = t.*after) } // ensures that all times have a common
 pred show {#Unknown = 1}
 run show for 4
 
+pred static_instance_1 {}
+run static_instance_1 for 7 but exactly 1 Flight, 1 Aircraft, 1 Airline, 1 Passenger, 1 Seat, 2 Airport
+
+pred static_instance_2 {
+	#{b:Booking} = 3
+	no disj b1, b2: Booking | b1.category = b2.category
+	#{s: EconomySeat | s not in BusinessSeat} = 2
+	#{s: BusinessSeat | s not in FirstClassSeat} = 2
+	#{s: FirstClassSeat} = 2
+}
+run static_instance_2 for 7 but exactly 2 Passenger, 2 Flight, 2 Airport, 1 Airline
+
+pred static_instance_3 {
+	one r:RoundTrip | #r.flights = 3
+}
+run static_instance_3 for 4 but exactly 1 Passenger, 1 Seat, 2 Airport, 1 Airline // It is impossible to have a roundtrip involving only 2 airports but 3 flights
+
 pred static_instance_4 // why can't I constrain it to use only 1 Booking in the models it creates?
 {
 	some disj b1, b2: Booking | #b1.flights = 1 && #b2.flights = 1 && getFirstFlight[b1] = getFirstFlight[b2] && 
