@@ -15,8 +15,8 @@ sig Aircraft {
 	seats: some Seat,
 	flights: set Flight
 }{
-	(all disj f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] => isBefore[getArrival[f1], getDeparture[f2]]) &&
-	(no disj f1, f2: flights | getDeparture[f1] = getDeparture[f2]) //&&
+	all disj f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] => isBefore[getArrival[f1], getDeparture[f2]]
+	no disj f1, f2: flights | getDeparture[f1] = getDeparture[f2]
 	//(all f1, f2: flights | ) // TODO check whether previous flight lands where next flight takes off
 }
 
@@ -79,10 +79,7 @@ sig EconomySeat extends Seat {}
 sig BusinessSeat extends EconomySeat {}
 sig FirstClassSeat extends BusinessSeat{}
 
-sig Time {
-	after: lone Time // lone, because we have a end in the timeline
-}{ isBefore[this, after]  && !isBefore[after, this] } // ensures no cycles exist in the timeline
-
+sig Time { after: lone Time }{ isBefore[this, after]  && !isBefore[after, this] } // ensures no cycles exist in the timeline
 fact { (one t: Time | Time = t.*after) } // ensures that all times have a common predecessor
 
 pred show{some b: Booking | #b.flights > 1}
@@ -92,9 +89,7 @@ run show for 4
  * Static model: Predicates
  */
 // True iff t1 is strictly before t2.
-pred isBefore[t1, t2: Time] {
-	t2 in t1.^after // Since time is totally ordered, if not in transitiv closure, first time is before second
-}
+pred isBefore[t1, t2: Time] { t2 in t1.^after } // Since time is totally ordered, if not in transitiv closure, first time is before second
 
 /*
  * Static model: Functions
