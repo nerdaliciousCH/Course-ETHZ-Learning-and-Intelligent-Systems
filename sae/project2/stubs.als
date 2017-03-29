@@ -6,7 +6,7 @@
  * make them extend other signatures.
  */
 
-open util/boolean
+//open util/boolean
 
 // possible that airport code is equal to booking ID
 sig string {}
@@ -15,7 +15,8 @@ sig Aircraft {
 	seats: some Seat,
 	flights: set Flight
 }{
-	(all f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] => isBefore[getArrival[f1], getArrival[f2]]) //&&
+	(all f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] => isBefore[getArrival[f1], getDeparture[f2]]) &&
+	(no disj f1, f2: flights | getDeparture[f1] = getDeparture[f2]) //&&
 	//(all f1, f2: flights | ) // TODO check whether previous flight lands where next flight takes off
 }
 
@@ -30,7 +31,7 @@ sig Airport {
 }
 
 fact unique_airport_code {
-	all A1, A2: Airport | A1 != A2 => A1.code != A2.code
+	all disj A1, A2: Airport | A1.code != A2.code
 }
 
 sig Booking {
@@ -39,18 +40,16 @@ sig Booking {
 	category: one Class,
 	flights: some Flight
 }{
-	(no f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] && isBefore[getArrival[f2], getArrival[f1]])
-	&& (no f1, f2: flights | getDeparture[f1] = getDeparture[f2]) // for some reason not equivalent to line XX)1
+	(all f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] => isBefore[getArrival[f2], getArrival[f1]])
+//	&& (no f1, f2: flights | getDeparture[f1] = getDeparture[f2]) // for some reason not equivalent to line XX)1
 } // TODO shit does not work.. either the prevous line or the line XX)1 need to work..  somehow are both of them overly restrictive
 fact ordered_flights_booking {
 	//(all b: Booking | no f1, f2: b.flights | getDeparture[f1] = getDeparture[f2]) && // XX)1
 	(all b: Booking | no f1, f2: b.flights | getArrival[f1] = getDeparture[f2])
 }
 
-//assert abc {no b: Booking | }
-
 fact unique_booking_id{
-	all B1, B2: Booking | B1 != B2 => B1.ID != B2.ID
+	all disj B1, B2: Booking | B1.ID != B2.ID
 }
 
 sig RoundTrip extends Booking { }{
@@ -72,14 +71,14 @@ sig Flight {
 	departure_airport: one Airport,
 	arrival_airport: one Airport
 }{
-	departure_time not in arrival_time.*after &&
+	isBefore[departure_time, arrival_time] &&
 	departure_airport != arrival_airport
 }
 
 fact {
-	(all f: Flight, b: Booking | f in b.flights <=> b in f.bookings) && // ensures that booking which uses this flight is scheduled on the flihgt and vice versa
+	(all f: Flight, b: Booking | f in getFlightsInBooking[b] <=> b in f.bookings) && // ensures that booking which uses this flight is scheduled on the flihgt and vice versa
 	(all f: Flight, o: Airline | f in o.flight_routes <=> o in f.operators) && // ensures that airline which operates a flight, has this flight in flight_routes and vice versa
-	(all f: Flight, a: Aircraft | f in a.flights <=> a in f.aircraft) // ensures that Aircraft which is used for the flight, has this flight in flights and vice versa
+	(all f: Flight, a: Aircraft | f in getFlights[a] <=> a in f.aircraft) // ensures that Aircraft which is used for the flight, has this flight in flights and vice versa
 }
 
 sig Passenger {
@@ -100,7 +99,7 @@ fact {
 	all t1, t2: Time | isBefore[t1, t2] => not isBefore[t2, t1] // ensures no cycles exist in the timeline
 }
 
-pred show{one b:Booking | #(b.flights) > 1}
+pred show{some b: Booking | #b.flights > 1}
 run show
 
 /*
