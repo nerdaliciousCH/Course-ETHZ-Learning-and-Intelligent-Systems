@@ -6,11 +6,6 @@
  * make them extend other signatures.
  */
 
-//open util/boolean
-
-// possible that airport code is equal to booking ID
-sig string {}
-
 sig Aircraft {
 	seats: some Seat,
 	flights: set Flight
@@ -21,18 +16,13 @@ sig Aircraft {
 }
 
 sig Airline {
-	name: one string,
 	aircrafts: set Aircraft,
 	flight_routes: set Flight
 }
 
-sig Airport {
-	code: one string
-}
-fact unique_airport_code { all disj A1, A2: Airport | A1.code != A2.code }
+sig Airport { }
 
 sig Booking {
-	ID: one string,
 	passengers: some Passenger,
 	category: one Class,
 	flights: some Flight
@@ -40,8 +30,6 @@ sig Booking {
 	all disj f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] => isBefore[getArrival[f1], getDeparture[f2]]
 	all disj f1, f2: flights | getDeparture[f1] != getDeparture[f2]
 }
-
-fact unique_booking_id{ all disj B1, B2: Booking | B1.ID != B2.ID }
 
 sig RoundTrip extends Booking { }{ getOrigin[getFirstFlight[this]] = getDestination[getLastFlight[this]] }
 
@@ -51,7 +39,6 @@ one sig Business_Class extends Class {}
 one sig Economy_Class extends Class {}
 
 sig Flight {
-	number: one string,
 	operators: some Airline,
 	aircraft: one Aircraft,
 	bookings: set Booking,
