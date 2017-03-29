@@ -7,6 +7,7 @@
  */
 
 // Open questions: One passenger is able to make several bookings flights, that depart at the same time
+// seats and aircrafts composition relation bla how to model
 
 sig Aircraft {
 	seats: some Seat,
@@ -75,6 +76,23 @@ fact { (one t: Time | Time = t.*after) } // ensures that all times have a common
 pred show{some b: Booking | #b.flights > 1}
 run show for 4
 
+pred static_instance_4 // why can't I constrain it to use only 1 Booking in the models it creates?
+{
+	some disj b1, b2: Booking | #b1.flights = 1 && #b2.flights = 1 && getFirstFlight[b1] = getFirstFlight[b2] && 
+			getFirstFlight[b1].departure_airport != getFirstFlight[b2].departure_airport &&
+			getFirstFlight[b1].arrival_airport != getFirstFlight[b2].arrival_airport
+	all f1,f2:Flight | f1.aircraft = f2.aircraft
+	
+}
+run static_instance_4 for 4 but exactly 2 Passenger, exactly 2 Seat, exactly 1 Airline
+
+pred static_instance_5 // why can't I constrain it to use only 1 Booking in the models it creates?
+{
+	{all p: Passenger | #p.bookings.flights = 3}
+	{all p: Passenger | getFirstFlight[p.bookings].aircraft = getLastFlight[p.bookings].aircraft and not getNextFlight[getFirstFlight[p.bookings], getFirstFlight[p.bookings]].aircraft = getFirstFlight[p.bookings].aircraft}
+	
+}
+run static_instance_5 for 4 but exactly 1 Passenger, exactly 2 Seat, exactly 1 Airline, exactly 2 Aircraft
 /*
  * Static model: Predicates
  */
