@@ -15,7 +15,7 @@ sig Aircraft {
 	seats: some Seat,
 	flights: set Flight
 }{
-	(all f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] => isBefore[getArrival[f1], getDeparture[f2]]) &&
+	(all disj f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] => isBefore[getArrival[f1], getDeparture[f2]]) &&
 	(no disj f1, f2: flights | getDeparture[f1] = getDeparture[f2]) //&&
 	//(all f1, f2: flights | ) // TODO check whether previous flight lands where next flight takes off
 }
@@ -29,10 +29,7 @@ sig Airline {
 sig Airport {
 	code: one string
 }
-
-fact unique_airport_code {
-	all disj A1, A2: Airport | A1.code != A2.code
-}
+fact unique_airport_code { all disj A1, A2: Airport | A1.code != A2.code }
 
 sig Booking {
 	ID: one string,
@@ -40,21 +37,13 @@ sig Booking {
 	category: one Class,
 	flights: some Flight
 }{
-	(all f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] => isBefore[getArrival[f2], getArrival[f1]])
-//	&& (no f1, f2: flights | getDeparture[f1] = getDeparture[f2]) // for some reason not equivalent to line XX)1
-} // TODO shit does not work.. either the prevous line or the line XX)1 need to work..  somehow are both of them overly restrictive
-fact ordered_flights_booking {
-	//(all b: Booking | no f1, f2: b.flights | getDeparture[f1] = getDeparture[f2]) && // XX)1
-	(all b: Booking | no f1, f2: b.flights | getArrival[f1] = getDeparture[f2])
+	all disj f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] => isBefore[getArrival[f1], getDeparture[f2]]
+	all disj f1, f2: flights | getDeparture[f1] != getDeparture[f2]
 }
 
-fact unique_booking_id{
-	all disj B1, B2: Booking | B1.ID != B2.ID
-}
+fact unique_booking_id{ all disj B1, B2: Booking | B1.ID != B2.ID }
 
-sig RoundTrip extends Booking { }{
-	getOrigin[getFirstFlight[this]] = getDestination[getLastFlight[this]]
-}
+sig RoundTrip extends Booking { }{ getOrigin[getFirstFlight[this]] = getDestination[getLastFlight[this]] }
 
 abstract sig Class { }
 one sig First_Class extends Class {}
@@ -76,9 +65,9 @@ sig Flight {
 }
 
 fact {
-	(all f: Flight, b: Booking | f in getFlightsInBooking[b] <=> b in f.bookings) && // ensures that booking which uses this flight is scheduled on the flihgt and vice versa
-	(all f: Flight, o: Airline | f in o.flight_routes <=> o in f.operators) && // ensures that airline which operates a flight, has this flight in flight_routes and vice versa
-	(all f: Flight, a: Aircraft | f in getFlights[a] <=> a in f.aircraft) // ensures that Aircraft which is used for the flight, has this flight in flights and vice versa
+	all f: Flight, b: Booking | f in getFlightsInBooking[b] <=> b in f.bookings // ensures that booking which uses this flight is scheduled on the flihgt and vice versa
+	all f: Flight, o: Airline | f in o.flight_routes <=> o in f.operators // ensures that airline which operates a flight, has this flight in flight_routes and vice versa
+	all f: Flight, a: Aircraft | f in getFlights[a] <=> a in f.aircraft // ensures that Aircraft which is used for the flight, has this flight in flights and vice versa
 }
 
 sig Passenger {
@@ -97,7 +86,7 @@ sig Time {
 fact { (one t: Time | Time = t.*after) } // ensures that all times have a common predecessor
 
 pred show{some b: Booking | #b.flights > 1}
-run show
+run show for 4
 
 /*
  * Static model: Predicates
