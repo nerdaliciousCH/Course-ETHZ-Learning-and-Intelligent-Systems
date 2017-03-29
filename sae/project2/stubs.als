@@ -12,7 +12,7 @@ sig Aircraft {
 }{
 	all disj f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] => isBefore[getArrival[f1], getDeparture[f2]]
 	no disj f1, f2: flights | getDeparture[f1] = getDeparture[f2]
-	//(all f1, f2: flights | ) // TODO check whether previous flight lands where next flight takes off
+	all f: flights | getDestination[f] = getOrigin[getNextFlight[f, flights]] or no getLaterFlights[f, flights]
 }
 
 sig Airline {
@@ -104,7 +104,14 @@ fun getFlights[a: Aircraft]: set Flight { a.flights }
 // Returns all bookings booked by the given passenger.
 fun getBookings[p: Passenger]: set Booking { p.bookings }
 // Returns all flights contained in the given booking.
-fun getFlightsInBooking[b: Booking]: set Flight { b.flights } 
+fun getFlightsInBooking[b: Booking]: set Flight { b.flights }
+
+fun getLaterFlights[first: Flight, fs: Flight]: set Flight {
+	{later: fs | isBefore[getDeparture[first], getDeparture[later]]}
+}
+fun getNextFlight[first: Flight, fs: Flight]: Flight{
+	{n: getLaterFlights[first, fs] | all rest: (getLaterFlights[first, fs] - n) | isBefore[getDeparture[n], getDeparture[rest]]}
+}
 
 /*
  * Dynamic model: Functions
