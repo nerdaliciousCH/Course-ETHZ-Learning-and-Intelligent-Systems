@@ -6,14 +6,17 @@
  * make them extend other signatures.
  */
 
+// Open questions: One passenger is able to make several bookings flights, that depart at the same time
+
 sig Aircraft {
 	seats: some Seat,
 	flights: set Flight
 }{
 	all disj f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] => isBefore[getArrival[f1], getDeparture[f2]]
 	no disj f1, f2: flights | getDeparture[f1] = getDeparture[f2]
-	//(all f1, f2: flights | ) // TODO check whether previous flight lands where next flight takes off
+	all f: flights | all l:{f3:{f2:flights| isBefore[getDeparture[f], getDeparture[f2]]} | all f4: ({f2:flights| isBefore[getDeparture[f], getDeparture[f2]]}-f3) | isBefore[getDeparture[f3], getDeparture[f4]]}|f.arrival_airport = l.departure_airport// ensures that 
 }
+
 
 sig Airline {
 	aircrafts: set Aircraft,
