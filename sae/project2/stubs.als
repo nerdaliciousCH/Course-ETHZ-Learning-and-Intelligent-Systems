@@ -92,12 +92,9 @@ sig FirstClassSeat extends BusinessSeat{}
 
 sig Time {
 	after: lone Time // lone, because we have a end in the timeline
-}
-fact {
-	// The next two lines together ensure, that the time is a totally ordered list
-	(one t: Time | Time = t.*after) && // ensures that all times have a common predecessor
-	all t1, t2: Time | isBefore[t1, t2] => not isBefore[t2, t1] // ensures no cycles exist in the timeline
-}
+}{ isBefore[this, after]  && !isBefore[after, this] } // ensures no cycles exist in the timeline
+
+fact { (one t: Time | Time = t.*after) } // ensures that all times have a common predecessor
 
 pred show{some b: Booking | #b.flights > 1}
 run show
@@ -105,7 +102,6 @@ run show
 /*
  * Static model: Predicates
  */
-
 // True iff t1 is strictly before t2.
 pred isBefore[t1, t2: Time] {
 	t2 in t1.^after // Since time is totally ordered, if not in transitiv closure, first time is before second
@@ -114,58 +110,30 @@ pred isBefore[t1, t2: Time] {
 /*
  * Static model: Functions
  */
-
 // Returns the departure time of the given flight.
-fun getDeparture[f: Flight]: Time {
-	f.departure_time
-}
-
+fun getDeparture[f: Flight]: Time { f.departure_time }
 // Returns the arrival time of the given flight.
-fun getArrival[f: Flight]: Time {
-	f.arrival_time
-}
-
+fun getArrival[f: Flight]: Time { f.arrival_time }
 // Returns the airport the given flight departs from.
-fun getOrigin[f: Flight]: Airport {
-	f.departure_airport
-}
-
+fun getOrigin[f: Flight]: Airport { f.departure_airport }
 // Returns the destination airport of the given flight. 
-fun getDestination[f: Flight]: Airport {
-	f.arrival_airport
-}
-
+fun getDestination[f: Flight]: Airport { f.arrival_airport }
 // Returns the first flight of the given booking.
-fun getFirstFlight[b: Booking]: Flight {
-	// only flight in set that has an earlier departure than every other flight in set
+fun getFirstFlight[b: Booking]: Flight { // only flight in set that has an earlier departure than every other flight in set
 	{f: b.flights | all fl: (b.flights - f) | isBefore[getDeparture[f], getDeparture[fl]]}
 }
-
 // Returns the last flight of the given booking.
-fun getLastFlight[b: Booking]: Flight {
-	// only flight in set that has an later departure than every other flight in set
+fun getLastFlight[b: Booking]: Flight { // only flight in set that has an later departure than every other flight in set
 	{f: b.flights | all fl: (b.flights - f) | isBefore[getDeparture[fl], getDeparture[f]]}
 }
-
 // Returns all seats of the given aircraft. 
-fun getSeats[a: Aircraft]: set Seat {
-	a.seats
-}
-
+fun getSeats[a: Aircraft]: set Seat { a.seats }
 // Returns all flights for which is given aircraft is used.
-fun getFlights[a: Aircraft]: set Flight {
-	a.flights
-}
-
+fun getFlights[a: Aircraft]: set Flight { a.flights }
 // Returns all bookings booked by the given passenger.
-fun getBookings[p: Passenger]: set Booking {
-	p.bookings
-}
-
+fun getBookings[p: Passenger]: set Booking { p.bookings }
 // Returns all flights contained in the given booking.
-fun getFlightsInBooking[b: Booking]: set Flight {
-	b.flights
-}
+fun getFlightsInBooking[b: Booking]: set Flight { b.flights } 
 
 /*
  * Dynamic model: Functions
