@@ -6,6 +6,8 @@
  * make them extend other signatures.
  */
 
+// Open questions: One passenger is able to make several bookings flights, that depart at the same time
+
 sig Aircraft {
 	seats: some Seat,
 	flights: set Flight
@@ -14,6 +16,7 @@ sig Aircraft {
 	no disj f1, f2: flights | getDeparture[f1] = getDeparture[f2]
 	all f: flights | getDestination[f] = getOrigin[getNextFlight[f, flights]] or no getLaterFlights[f, flights]
 }
+
 
 sig Airline {
 	aircrafts: set Aircraft,
