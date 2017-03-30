@@ -35,6 +35,12 @@ sig Booking {
 	all disj f1, f2: flights | getDeparture[f1] != getDeparture[f2]
 }
 
+fact {
+	all f: Flight | #f.aircraft.seats >= #f.bookings.passengers
+	all f: Flight | #(f.aircraft.seats & BusinessSeat) >= #(f.bookings - {b1: f.bookings | b1.category = Economy_Class}).passengers
+	all f: Flight | #(f.aircraft.seats & FirstClassSeat) >= #{b1: f.bookings | b1.category = First_Class}.passengers
+}
+
 sig RoundTrip extends Booking { }{ getOrigin[getFirstFlight[this]] = getDestination[getLastFlight[this]] }
 
 abstract sig Class { }
@@ -64,6 +70,10 @@ fact {
 sig Passenger {
 	bookings: set Booking,
 	location: one PassengerLocation
+}{
+	// enforces that a person can only be in bookings that happen after another (no overlapping bookings)
+	all disj b1, b2: {b3: Booking | this in b3.passengers} | isBefore[getDeparture[getFirstFlight[b1]], getDeparture[getFirstFlight[b2]]] => isBefore[getArrival[getLastFlight[b1]], getDeparture[getFirstFlight[b2]]]
+	all disj b1, b2: {b3: Booking | this in b3.passengers} | getDeparture[getFirstFlight[b1]] != getDeparture[getFirstFlight[b2]]
 }
 
 abstract sig Seat { }
@@ -81,6 +91,9 @@ lone sig InAir extends AircraftLocation {}
 sig Time { after: lone Time }{ isBefore[this, after]  && !isBefore[after, this] } // ensures no cycles exist in the timeline
 fact { (one t: Time | Time = t.*after) } // ensures that all times have a common predecessor
 
+/*
+ * Predicates from Task B)
+ */
 pred show {#Unknown = 1}
 run show for 4
 
