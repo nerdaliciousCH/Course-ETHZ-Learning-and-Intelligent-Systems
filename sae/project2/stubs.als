@@ -6,9 +6,6 @@
  * make them extend other signatures.
  */
 
-// Open questions: One passenger is able to make several bookings flights, that depart at the same time
-// seats and aircrafts composition relation bla how to model
-
 sig Aircraft extends PassengerLocation {
 	seats: some Seat,
 	flights: set Flight,
