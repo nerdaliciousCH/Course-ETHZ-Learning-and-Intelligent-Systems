@@ -89,45 +89,41 @@ sig Time { after: lone Time }{ isBefore[this, after]  && !isBefore[after, this] 
 fact { (one t: Time | Time = t.*after) } // ensures that all times have a common predecessor
 
 /*
+ * Dynamic Model
+ */
+
+sig State {}
+
+/*
  * Predicates from Task B)
  */
-pred show {#Unknown = 1}
-run show for 4
-
-pred static_instance_1 {}
-run static_instance_1 for 7 but exactly 1 Flight, 1 Aircraft, 1 Airline, 1 Passenger, 1 Seat, 2 Airport
-
-pred static_instance_2 {
-	#{b:Booking} = 3
-	no disj b1, b2: Booking | b1.category = b2.category
-	#{s: EconomySeat | s not in BusinessSeat} = 2
-	#{s: BusinessSeat | s not in FirstClassSeat} = 2
-	#{s: FirstClassSeat} = 2
+pred static_instance_1 {#Flight = 1 and #Aircraft = 1 and #Airline = 1 and #Passenger = 1 and #Seat = 1 and #Airport = 2}
+pred static_instance_2 { // min. for 6
+	#Booking = 3 and all disj b1, b2: Booking | b1.category != b2.category
+	#(Seat - BusinessSeat) = 2
+	#(BusinessSeat - FirstClassSeat) = 2
+	#FirstClassSeat = 2
+	#Passenger = 2 and #Flight = 2 and #Airport = 2 and #Airline = 1
 }
-run static_instance_2 for 7 but exactly 2 Passenger, 2 Flight, 2 Airport, 1 Airline
-
-pred static_instance_3 {
-	one r:RoundTrip | #r.flights = 3
+pred static_instance_3 { // Impossible because 3 flights over 2 airports implies that the first and last airports are not the same
+	one r: RoundTrip | #r.flights = 3
+	#Passenger = 1 and #Seat = 1 and #Airport = 2 and #Airline = 1
 }
-run static_instance_3 for 4 but exactly 1 Passenger, 1 Seat, 2 Airport, 1 Airline // It is impossible to have a roundtrip involving only 2 airports but 3 flights
-
-pred static_instance_4 // why can't I constrain it to use only 1 Booking in the models it creates?
-{
-	some disj b1, b2: Booking | #b1.flights = 1 && #b2.flights = 1 && getFirstFlight[b1] = getFirstFlight[b2] && 
-			getFirstFlight[b1].departure_airport != getFirstFlight[b2].departure_airport &&
-			getFirstFlight[b1].arrival_airport != getFirstFlight[b2].arrival_airport
-	all f1,f2:Flight | f1.aircraft = f2.aircraft
-	
+pred static_instance_4 { // min. for 6
+	some disj b1, b2: Booking | #(b1.flights & b2.flights) = 1 and
+			getOrigin[getFirstFlight[b1]] != getOrigin[getFirstFlight[b2]] and
+			getDestination[getLastFlight[b1]] != getDestination[getLastFlight[b2]]
+	all f1, f2: Flight | f1.aircraft = f2.aircraft
 }
-run static_instance_4 for 4 but exactly 2 Passenger, exactly 2 Seat, exactly 1 Airline
-
-pred static_instance_5 // why can't I constrain it to use only 1 Booking in the models it creates?
-{
-	{all p: Passenger | #p.bookings.flights = 3}
-	{all p: Passenger | getFirstFlight[p.bookings].aircraft = getLastFlight[p.bookings].aircraft and not getNextFlight[getFirstFlight[p.bookings], getFirstFlight[p.bookings]].aircraft = getFirstFlight[p.bookings].aircraft}
-	
+pred static_instance_5 {
+	one p: Passenger | one b: p.bookings | #getFlightsInBooking[b] = 3 and
+			getFirstFlight[b].aircraft = getLastFlight[b].aircraft and
+			#getFlightsInBooking[b].aircraft = 2
+	#Passenger = 1 and #Aircraft = 2 and #Seat = 2 and #Airline = 1
 }
-run static_instance_5 for 4 but exactly 1 Passenger, exactly 2 Seat, exactly 1 Airline, exactly 2 Aircraft
+run static_instance_5 for 6
+//run static_instance_1 for 7 but exactly 1 Flight, 1 Aircraft, 1 Airline, 1 Passenger, 1 Seat, 2 Airport
+
 /*
  * Static model: Predicates
  */
