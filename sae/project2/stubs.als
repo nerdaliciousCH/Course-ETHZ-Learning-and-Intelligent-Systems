@@ -92,7 +92,13 @@ fact { (one t: Time | Time = t.*after) } // ensures that all times have a common
  * Dynamic Model
  */
 
-sig State {}
+sig State {
+	time: one Time
+}{
+	//all p: Passenger | b: {b1: Bookings | p in b1.passengers} | 
+}
+
+
 
 /*
  * Predicates from Task B)
