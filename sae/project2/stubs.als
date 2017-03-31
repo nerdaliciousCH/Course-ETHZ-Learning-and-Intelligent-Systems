@@ -235,7 +235,7 @@ pred dynamic_instance_3 {
 	// the two passengers always travel together
 	some disj p1, p2: Passenger | all t: Time | getPassengerLocation[t, p1] = getPassengerLocation[t, p2]
 	// one roundtrip and nothing else, and one normal booking
-	one p1, p2: Passenger | (p1 in RoundTrip.passengers) and (#{b: Bookings | p1 in b.passengers} = 1) and (p2 not in RoundTrip.passengers)
+	one p1, p2: Passenger | (p1 in RoundTrip.passengers) and (#{b: Booking | p1 in b.passengers} = 1) and (p2 not in RoundTrip.passengers)
 	#Booking = 3 and #Aircraft = 2 and #Airport = 2 and #Passenger = 2
 }
 
