@@ -58,9 +58,12 @@ sig Flight {
 }
 
 fact {
-	all f: Flight, b: Booking | f in getFlightsInBooking[b] <=> b in f.bookings // ensures that booking which uses this flight is scheduled on the flihgt and vice versa
-	all f: Flight, o: Airline | f in o.flight_routes <=> o in f.operators // ensures that airline which operates a flight, has this flight in flight_routes and vice versa
-	all f: Flight, a: Aircraft | f in getFlights[a] <=> a in f.aircraft // ensures that Aircraft which is used for the flight, has this flight in flights and vice versa
+	// ensures that booking which uses this flight is scheduled on the flight and vice versa
+	all f: Flight, b: Booking | f in getFlightsInBooking[b] <=> b in f.bookings
+	// ensures that airline which operates a flight, has this flight in flight_routes and vice versa
+	all f: Flight, o: Airline | f in o.flight_routes <=> o in f.operators
+	// ensures that Aircraft which is used for the flight, has this flight in flights and vice versa
+	all f: Flight, a: Aircraft | f in getFlights[a] <=> a in f.aircraft
 }
 
 sig Passenger {
@@ -86,37 +89,46 @@ lone sig InAir extends AircraftLocation {}
 sig Time { after: lone Time }{ isBefore[this, after]  && !isBefore[after, this] } // ensures no cycles exist in the timeline
 fact { (one t: Time | Time = t.*after) } // ensures that all times have a common predecessor
 
+
 /*
  * Dynamic Model
  */
-
 
 sig State {
 	time: one Time,
 	p_locations: Passenger -> one PassengerLocation,
 	a_locations: Aircraft -> one AircraftLocation
 }{
+	// the following expressions ensure correct modelling of passenger and aircraft location throughout the travel time
+
+	// if the passenger has no current flight his location is unknown, otherwise his location equals the location of the aircraft he is in
 	all p: Passenger | (#getCurrentFlightForPassenger[p, time] = 0 => getPassengerLocation[time, p] = Unknown) and
 			(#getCurrentFlightForPassenger[p, time] > 0 =>  getPassengerLocation[time, p] = getCurrentFlightForPassenger[p, time].aircraft)
+	// ensure aircraft location is set correctly, function names self-explanatory 
 	all a: Aircraft | (#getCurrentFlightForAircraft[a, time] = 0 and #{f: a.flights | isBefore[getDeparture[f], time]} > 0) => a_locations[a] = getDestination[getNextFlightFromTime[time, a]]
 	all a: Aircraft | (#getCurrentFlightForAircraft[a, time] = 0 and #{f: a.flights | isBefore[getDeparture[f], time]} = 0) =>
 			a_locations[a] = getOrigin[{f1: a.flights | all f2: (a.flights - f1) | isBefore[getDeparture[f1], getDeparture[f2]]}]
+	// if aircraft currently has a flight, its location is in air
 	all a: Aircraft | (#getCurrentFlightForAircraft[a, time] > 0 => a_locations[a] = InAir)
 }
 fact {
+	// ensure states are unique in terms of time
 	no disj s1, s2: State | s1.time = s2.time
 }
 pred timeStepState[s1, s2: State] {
 	isBefore[s1.time, s2.time]
 }
 
+// small intermediate test
 pred show {#State = 5 and #Booking.flights = 1 and #Passenger = 1 and #State = #Time and #Flight = #Booking.flights}
 run show for 5
 
 /*
  * Predicates from Task B)
  */
+
 pred static_instance_1 {#Flight = 1 and #Aircraft = 1 and #Airline = 1 and #Passenger = 1 and #Seat = 1 and #Airport = 2}
+
 pred static_instance_2 { // min. for 6
 	#Booking = 3 and all disj b1, b2: Booking | b1.category != b2.category
 	#(Seat - BusinessSeat) = 2
@@ -124,34 +136,40 @@ pred static_instance_2 { // min. for 6
 	#FirstClassSeat = 2
 	#Passenger = 2 and #Flight = 2 and #Airport = 2 and #Airline = 1
 }
+
 pred static_instance_3 { // Impossible because 3 flights over 2 airports implies that the first and last airports are not the same
 	one r: RoundTrip | #r.flights = 3
 	#Passenger = 1 and #Seat = 1 and #Airport = 2 and #Airline = 1
 }
+
 pred static_instance_4 { // min. for 6
 	some disj b1, b2: Booking | #(b1.flights & b2.flights) = 1 and
 			getOrigin[getFirstFlight[b1]] != getOrigin[getFirstFlight[b2]] and
 			getDestination[getLastFlight[b1]] != getDestination[getLastFlight[b2]]
 	all f1, f2: Flight | f1.aircraft = f2.aircraft
 }
+
 pred static_instance_5 {
 	one p: Passenger | one b: p.bookings | #getFlightsInBooking[b] = 3 and
 			getFirstFlight[b].aircraft = getLastFlight[b].aircraft and
 			#getFlightsInBooking[b].aircraft = 2
 	#Passenger = 1 and #Aircraft = 2 and #Seat = 2 and #Airline = 1
 }
+
 run static_instance_5 for 6
 //run static_instance_1 for 7 but exactly 1 Flight, 1 Aircraft, 1 Airline, 1 Passenger, 1 Seat, 2 Airport
 
 /*
  * Static model: Predicates
  */
+
 // True iff t1 is strictly before t2.
 pred isBefore[t1, t2: Time] { t2 in t1.^after } // Since time is totally ordered, if not in transitiv closure, first time is before second
 
 /*
  * Static model: Functions
  */
+
 // Returns the departure time of the given flight.
 fun getDeparture[f: Flight]: Time { f.departure_time }
 // Returns the arrival time of the given flight.
@@ -219,6 +237,7 @@ fun getTime[s: State]: Time {
 /*
  * Predicates for Task D)
  */
+
 pred dynamic_instance_1 {
 	// we check for two seperate points in time, i.e., for two different states, whether a passenger can be on different planes. 
 	one p: Passenger | some disj s1, s2: State | getCurrentFlightForPassenger[p, getTime[s1]].aircraft != getCurrentFlightForPassenger[p, getTime[s2]].aircraft
