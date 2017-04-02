@@ -258,4 +258,4 @@ pred dynamic_instance_3 {
 	#Booking = 3 and #Aircraft = 2 and #Airport = 2 and #Passenger = 2
 }
 
-run dynamic_instance_2 for 5
+run dynamic_instance_3 for 5

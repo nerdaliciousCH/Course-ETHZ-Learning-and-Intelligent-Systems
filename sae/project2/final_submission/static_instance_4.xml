@@ -1,0 +1,287 @@
+<alloy builddate="2012-09-25 15:54 EDT">
+
+<instance bitwidth="0" maxseq="0" command="Run static_instance_4 for 6" filename="/home/daniel/Documents/ETH/S6/LIS/projects/lis-2017/sae/project2/stubs.als">
+
+<sig label="seq/Int" ID="0" parentID="1" builtin="yes">
+</sig>
+
+<sig label="Int" ID="1" parentID="2" builtin="yes">
+</sig>
+
+<sig label="String" ID="3" parentID="2" builtin="yes">
+</sig>
+
+<sig label="this/Airline" ID="4" parentID="2">
+   <atom label="Airline$0"/>
+   <atom label="Airline$1"/>
+   <atom label="Airline$2"/>
+</sig>
+
+<field label="aircrafts" ID="5" parentID="4">
+   <tuple> <atom label="Airline$1"/> <atom label="Aircraft$0"/> </tuple>
+   <tuple> <atom label="Airline$2"/> <atom label="Aircraft$0"/> </tuple>
+   <tuple> <atom label="Airline$2"/> <atom label="Aircraft$1"/> </tuple>
+   <types> <type ID="4"/> <type ID="6"/> </types>
+</field>
+
+<field label="flight_routes" ID="7" parentID="4">
+   <tuple> <atom label="Airline$0"/> <atom label="Flight$1"/> </tuple>
+   <tuple> <atom label="Airline$0"/> <atom label="Flight$2"/> </tuple>
+   <tuple> <atom label="Airline$1"/> <atom label="Flight$2"/> </tuple>
+   <tuple> <atom label="Airline$2"/> <atom label="Flight$0"/> </tuple>
+   <tuple> <atom label="Airline$2"/> <atom label="Flight$1"/> </tuple>
+   <tuple> <atom label="Airline$2"/> <atom label="Flight$2"/> </tuple>
+   <types> <type ID="4"/> <type ID="8"/> </types>
+</field>
+
+<sig label="this/RoundTrip" ID="9" parentID="10">
+</sig>
+
+<sig label="this/Booking" ID="10" parentID="2">
+   <atom label="Booking$0"/>
+   <atom label="Booking$1"/>
+   <atom label="Booking$2"/>
+   <atom label="Booking$3"/>
+   <atom label="Booking$4"/>
+</sig>
+
+<field label="passengers" ID="11" parentID="10">
+   <tuple> <atom label="Booking$0"/> <atom label="Passenger$4"/> </tuple>
+   <tuple> <atom label="Booking$0"/> <atom label="Passenger$5"/> </tuple>
+   <tuple> <atom label="Booking$1"/> <atom label="Passenger$1"/> </tuple>
+   <tuple> <atom label="Booking$1"/> <atom label="Passenger$2"/> </tuple>
+   <tuple> <atom label="Booking$1"/> <atom label="Passenger$3"/> </tuple>
+   <tuple> <atom label="Booking$2"/> <atom label="Passenger$3"/> </tuple>
+   <tuple> <atom label="Booking$3"/> <atom label="Passenger$2"/> </tuple>
+   <tuple> <atom label="Booking$4"/> <atom label="Passenger$5"/> </tuple>
+   <types> <type ID="10"/> <type ID="12"/> </types>
+</field>
+
+<field label="category" ID="13" parentID="10">
+   <tuple> <atom label="Booking$0"/> <atom label="Business_Class$0"/> </tuple>
+   <tuple> <atom label="Booking$1"/> <atom label="Business_Class$0"/> </tuple>
+   <tuple> <atom label="Booking$2"/> <atom label="First_Class$0"/> </tuple>
+   <tuple> <atom label="Booking$3"/> <atom label="Business_Class$0"/> </tuple>
+   <tuple> <atom label="Booking$4"/> <atom label="Business_Class$0"/> </tuple>
+   <types> <type ID="10"/> <type ID="14"/> </types>
+</field>
+
+<field label="flights" ID="15" parentID="10">
+   <tuple> <atom label="Booking$0"/> <atom label="Flight$2"/> </tuple>
+   <tuple> <atom label="Booking$1"/> <atom label="Flight$0"/> </tuple>
+   <tuple> <atom label="Booking$2"/> <atom label="Flight$1"/> </tuple>
+   <tuple> <atom label="Booking$3"/> <atom label="Flight$1"/> </tuple>
+   <tuple> <atom label="Booking$3"/> <atom label="Flight$2"/> </tuple>
+   <tuple> <atom label="Booking$4"/> <atom label="Flight$0"/> </tuple>
+   <tuple> <atom label="Booking$4"/> <atom label="Flight$1"/> </tuple>
+   <types> <type ID="10"/> <type ID="8"/> </types>
+</field>
+
+<sig label="this/First_Class" ID="16" parentID="14" one="yes">
+   <atom label="First_Class$0"/>
+</sig>
+
+<sig label="this/Business_Class" ID="17" parentID="14" one="yes">
+   <atom label="Business_Class$0"/>
+</sig>
+
+<sig label="this/Economy_Class" ID="18" parentID="14" one="yes">
+   <atom label="Economy_Class$0"/>
+</sig>
+
+<sig label="this/Class" ID="14" parentID="2" abstract="yes">
+</sig>
+
+<sig label="this/Flight" ID="8" parentID="2">
+   <atom label="Flight$0"/>
+   <atom label="Flight$1"/>
+   <atom label="Flight$2"/>
+</sig>
+
+<field label="operators" ID="19" parentID="8">
+   <tuple> <atom label="Flight$0"/> <atom label="Airline$2"/> </tuple>
+   <tuple> <atom label="Flight$1"/> <atom label="Airline$0"/> </tuple>
+   <tuple> <atom label="Flight$1"/> <atom label="Airline$2"/> </tuple>
+   <tuple> <atom label="Flight$2"/> <atom label="Airline$0"/> </tuple>
+   <tuple> <atom label="Flight$2"/> <atom label="Airline$1"/> </tuple>
+   <tuple> <atom label="Flight$2"/> <atom label="Airline$2"/> </tuple>
+   <types> <type ID="8"/> <type ID="4"/> </types>
+</field>
+
+<field label="aircraft" ID="20" parentID="8">
+   <tuple> <atom label="Flight$0"/> <atom label="Aircraft$1"/> </tuple>
+   <tuple> <atom label="Flight$1"/> <atom label="Aircraft$1"/> </tuple>
+   <tuple> <atom label="Flight$2"/> <atom label="Aircraft$1"/> </tuple>
+   <types> <type ID="8"/> <type ID="6"/> </types>
+</field>
+
+<field label="bookings" ID="21" parentID="8">
+   <tuple> <atom label="Flight$0"/> <atom label="Booking$1"/> </tuple>
+   <tuple> <atom label="Flight$0"/> <atom label="Booking$4"/> </tuple>
+   <tuple> <atom label="Flight$1"/> <atom label="Booking$2"/> </tuple>
+   <tuple> <atom label="Flight$1"/> <atom label="Booking$3"/> </tuple>
+   <tuple> <atom label="Flight$1"/> <atom label="Booking$4"/> </tuple>
+   <tuple> <atom label="Flight$2"/> <atom label="Booking$0"/> </tuple>
+   <tuple> <atom label="Flight$2"/> <atom label="Booking$3"/> </tuple>
+   <types> <type ID="8"/> <type ID="10"/> </types>
+</field>
+
+<field label="departure_time" ID="22" parentID="8">
+   <tuple> <atom label="Flight$0"/> <atom label="Time$2"/> </tuple>
+   <tuple> <atom label="Flight$1"/> <atom label="Time$1"/> </tuple>
+   <tuple> <atom label="Flight$2"/> <atom label="Time$0"/> </tuple>
+   <types> <type ID="8"/> <type ID="23"/> </types>
+</field>
+
+<field label="arrival_time" ID="24" parentID="8">
+   <tuple> <atom label="Flight$0"/> <atom label="Time$5"/> </tuple>
+   <tuple> <atom label="Flight$1"/> <atom label="Time$4"/> </tuple>
+   <tuple> <atom label="Flight$2"/> <atom label="Time$3"/> </tuple>
+   <types> <type ID="8"/> <type ID="23"/> </types>
+</field>
+
+<field label="departure_airport" ID="25" parentID="8">
+   <tuple> <atom label="Flight$0"/> <atom label="Airport$0"/> </tuple>
+   <tuple> <atom label="Flight$1"/> <atom label="Airport$1"/> </tuple>
+   <tuple> <atom label="Flight$2"/> <atom label="Airport$0"/> </tuple>
+   <types> <type ID="8"/> <type ID="26"/> </types>
+</field>
+
+<field label="arrival_airport" ID="27" parentID="8">
+   <tuple> <atom label="Flight$0"/> <atom label="Airport$2"/> </tuple>
+   <tuple> <atom label="Flight$1"/> <atom label="Airport$0"/> </tuple>
+   <tuple> <atom label="Flight$2"/> <atom label="Airport$1"/> </tuple>
+   <types> <type ID="8"/> <type ID="26"/> </types>
+</field>
+
+<sig label="this/Passenger" ID="12" parentID="2">
+   <atom label="Passenger$0"/>
+   <atom label="Passenger$1"/>
+   <atom label="Passenger$2"/>
+   <atom label="Passenger$3"/>
+   <atom label="Passenger$4"/>
+   <atom label="Passenger$5"/>
+</sig>
+
+<field label="bookings" ID="28" parentID="12">
+   <tuple> <atom label="Passenger$1"/> <atom label="Booking$0"/> </tuple>
+   <tuple> <atom label="Passenger$5"/> <atom label="Booking$1"/> </tuple>
+   <tuple> <atom label="Passenger$5"/> <atom label="Booking$2"/> </tuple>
+   <tuple> <atom label="Passenger$5"/> <atom label="Booking$3"/> </tuple>
+   <tuple> <atom label="Passenger$5"/> <atom label="Booking$4"/> </tuple>
+   <types> <type ID="12"/> <type ID="10"/> </types>
+</field>
+
+<sig label="this/FirstClassSeat" ID="29" parentID="30">
+   <atom label="FirstClassSeat$0"/>
+   <atom label="FirstClassSeat$1"/>
+   <atom label="FirstClassSeat$2"/>
+   <atom label="FirstClassSeat$3"/>
+</sig>
+
+<sig label="this/BusinessSeat" ID="30" parentID="31">
+</sig>
+
+<sig label="this/EconomySeat" ID="31" parentID="32">
+   <atom label="EconomySeat$0"/>
+</sig>
+
+<sig label="this/Seat" ID="32" parentID="2" abstract="yes">
+</sig>
+
+<sig label="this/Aircraft" ID="6" parentID="33">
+   <atom label="Aircraft$0"/>
+   <atom label="Aircraft$1"/>
+</sig>
+
+<field label="seats" ID="34" parentID="6">
+   <tuple> <atom label="Aircraft$0"/> <atom label="EconomySeat$0"/> </tuple>
+   <tuple> <atom label="Aircraft$1"/> <atom label="FirstClassSeat$0"/> </tuple>
+   <tuple> <atom label="Aircraft$1"/> <atom label="FirstClassSeat$1"/> </tuple>
+   <tuple> <atom label="Aircraft$1"/> <atom label="FirstClassSeat$2"/> </tuple>
+   <tuple> <atom label="Aircraft$1"/> <atom label="FirstClassSeat$3"/> </tuple>
+   <types> <type ID="6"/> <type ID="32"/> </types>
+</field>
+
+<field label="flights" ID="35" parentID="6">
+   <tuple> <atom label="Aircraft$1"/> <atom label="Flight$0"/> </tuple>
+   <tuple> <atom label="Aircraft$1"/> <atom label="Flight$1"/> </tuple>
+   <tuple> <atom label="Aircraft$1"/> <atom label="Flight$2"/> </tuple>
+   <types> <type ID="6"/> <type ID="8"/> </types>
+</field>
+
+<sig label="this/Unknown" ID="36" parentID="33" lone="yes">
+</sig>
+
+<sig label="this/PassengerLocation" ID="33" parentID="37" abstract="yes">
+</sig>
+
+<sig label="this/Airport" ID="26" parentID="38">
+   <atom label="Airport$0"/>
+   <atom label="Airport$1"/>
+   <atom label="Airport$2"/>
+   <atom label="Airport$3"/>
+</sig>
+
+<sig label="this/InAir" ID="39" parentID="38" lone="yes">
+</sig>
+
+<sig label="this/AircraftLocation" ID="38" parentID="37" abstract="yes">
+</sig>
+
+<sig label="this/Location" ID="37" parentID="2" abstract="yes">
+</sig>
+
+<sig label="this/Time" ID="23" parentID="2">
+   <atom label="Time$0"/>
+   <atom label="Time$1"/>
+   <atom label="Time$2"/>
+   <atom label="Time$3"/>
+   <atom label="Time$4"/>
+   <atom label="Time$5"/>
+</sig>
+
+<field label="after" ID="40" parentID="23">
+   <tuple> <atom label="Time$0"/> <atom label="Time$3"/> </tuple>
+   <tuple> <atom label="Time$1"/> <atom label="Time$4"/> </tuple>
+   <tuple> <atom label="Time$2"/> <atom label="Time$5"/> </tuple>
+   <tuple> <atom label="Time$3"/> <atom label="Time$1"/> </tuple>
+   <tuple> <atom label="Time$4"/> <atom label="Time$2"/> </tuple>
+   <types> <type ID="23"/> <type ID="23"/> </types>
+</field>
+
+<sig label="this/State" ID="41" parentID="2">
+</sig>
+
+<field label="time" ID="42" parentID="41">
+   <types> <type ID="41"/> <type ID="23"/> </types>
+</field>
+
+<field label="p_locations" ID="43" parentID="41">
+   <types> <type ID="41"/> <type ID="12"/> <type ID="33"/> </types>
+</field>
+
+<field label="a_locations" ID="44" parentID="41">
+   <types> <type ID="41"/> <type ID="6"/> <type ID="38"/> </types>
+</field>
+
+<sig label="univ" ID="2" builtin="yes">
+</sig>
+
+<skolem label="$static_instance_4_b1" ID="45">
+   <tuple> <atom label="Booking$4"/> </tuple>
+   <types> <type ID="10"/> </types>
+</skolem>
+
+<skolem label="$static_instance_4_b2" ID="46">
+   <tuple> <atom label="Booking$3"/> </tuple>
+   <types> <type ID="10"/> </types>
+</skolem>
+
+</instance>
+
+<source filename="/home/daniel/Documents/ETH/S6/LIS/projects/lis-2017/sae/project2/stubs.als" content="/*&#x000a; * Static model: Signatures&#x000a; *&#x000a; * The model should contain the following (and potentially other) signatures.&#x000a; * If necessary, you have to make some of the signatures abstract and&#x000a; * make them extend other signatures.&#x000a; */&#x000a;&#x000a;sig Aircraft extends PassengerLocation {&#x000a;&#x0009;seats: some Seat,&#x000a;&#x0009;flights: set Flight&#x000a;}{&#x000a;&#x0009;all disj f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] =&gt; isBefore[getArrival[f1], getDeparture[f2]]&#x000a;&#x0009;no disj f1, f2: flights | getDeparture[f1] = getDeparture[f2]&#x000a;&#x0009;all f: flights | getDestination[f] = getOrigin[getNextFlight[f, flights]] or no getLaterFlights[f, flights]&#x000a;}&#x000a;&#x000a;sig Airline {&#x000a;&#x0009;aircrafts: set Aircraft,&#x000a;&#x0009;flight_routes: set Flight&#x000a;}&#x000a;&#x000a;sig Airport extends AircraftLocation { }&#x000a;&#x000a;sig Booking {&#x000a;&#x0009;passengers: some Passenger,&#x000a;&#x0009;category: one Class,&#x000a;&#x0009;flights: some Flight&#x000a;}{&#x000a;&#x0009;all disj f1, f2: flights | isBefore[getDeparture[f1], getDeparture[f2]] =&gt; isBefore[getArrival[f1], getDeparture[f2]]&#x000a;&#x0009;all disj f1, f2: flights | getDeparture[f1] != getDeparture[f2]&#x000a;}&#x000a;&#x000a;fact {&#x000a;&#x0009;all f: Flight | #f.aircraft.seats &gt;= #f.bookings.passengers&#x000a;&#x0009;all f: Flight | #(f.aircraft.seats &amp; BusinessSeat) &gt;= #(f.bookings - {b1: f.bookings | b1.category = Economy_Class}).passengers&#x000a;&#x0009;all f: Flight | #(f.aircraft.seats &amp; FirstClassSeat) &gt;= #{b1: f.bookings | b1.category = First_Class}.passengers&#x000a;}&#x000a;&#x000a;sig RoundTrip extends Booking { }{ getOrigin[getFirstFlight[this]] = getDestination[getLastFlight[this]] }&#x000a;&#x000a;abstract sig Class { }&#x000a;one sig First_Class extends Class {}&#x000a;one sig Business_Class extends Class {}&#x000a;one sig Economy_Class extends Class {}&#x000a;&#x000a;sig Flight {&#x000a;&#x0009;operators: some Airline,&#x000a;&#x0009;aircraft: one Aircraft,&#x000a;&#x0009;bookings: set Booking,&#x000a;&#x0009;departure_time: one Time,&#x000a;&#x0009;arrival_time: one Time,&#x000a;&#x0009;departure_airport: one Airport,&#x000a;&#x0009;arrival_airport: one Airport&#x000a;}{&#x000a;&#x0009;isBefore[departure_time, arrival_time] &amp;&amp;&#x000a;&#x0009;departure_airport != arrival_airport&#x000a;}&#x000a;&#x000a;fact {&#x000a;&#x0009;// ensures that booking which uses this flight is scheduled on the flight and vice versa&#x000a;&#x0009;all f: Flight, b: Booking | f in getFlightsInBooking[b] &lt;=&gt; b in f.bookings&#x000a;&#x0009;// ensures that airline which operates a flight, has this flight in flight_routes and vice versa&#x000a;&#x0009;all f: Flight, o: Airline | f in o.flight_routes &lt;=&gt; o in f.operators&#x000a;&#x0009;// ensures that Aircraft which is used for the flight, has this flight in flights and vice versa&#x000a;&#x0009;all f: Flight, a: Aircraft | f in getFlights[a] &lt;=&gt; a in f.aircraft&#x000a;}&#x000a;&#x000a;sig Passenger {&#x000a;&#x0009;bookings: set Booking&#x000a;}{&#x000a;&#x0009;// enforces that a person can only be in bookings that happen after another (no overlapping bookings)&#x000a;&#x0009;all disj b1, b2: {b3: Booking | this in b3.passengers} | isBefore[getDeparture[getFirstFlight[b1]], getDeparture[getFirstFlight[b2]]] =&gt; isBefore[getArrival[getLastFlight[b1]], getDeparture[getFirstFlight[b2]]]&#x000a;&#x0009;all disj b1, b2: {b3: Booking | this in b3.passengers} | getDeparture[getFirstFlight[b1]] != getDeparture[getFirstFlight[b2]]&#x000a;}&#x000a;&#x000a;abstract sig Seat { }&#x000a;sig EconomySeat extends Seat {}&#x000a;sig BusinessSeat extends EconomySeat {}&#x000a;sig FirstClassSeat extends BusinessSeat{}&#x000a;fact { all s: Seat | #{a: Aircraft | s in getSeats[a]} = 1 }&#x000a;&#x000a;abstract sig Location {}&#x000a;abstract sig PassengerLocation extends Location {}&#x000a;abstract sig AircraftLocation extends Location {}&#x000a;lone sig Unknown extends PassengerLocation {}&#x000a;lone sig InAir extends AircraftLocation {}&#x000a;&#x000a;sig Time { after: lone Time }{ isBefore[this, after]  &amp;&amp; !isBefore[after, this] } // ensures no cycles exist in the timeline&#x000a;fact { (one t: Time | Time = t.*after) } // ensures that all times have a common predecessor&#x000a;&#x000a;&#x000a;/*&#x000a; * Dynamic Model&#x000a; */&#x000a;&#x000a;sig State {&#x000a;&#x0009;time: one Time,&#x000a;&#x0009;p_locations: Passenger -&gt; one PassengerLocation,&#x000a;&#x0009;a_locations: Aircraft -&gt; one AircraftLocation&#x000a;}{&#x000a;&#x0009;// the following expressions ensure correct modelling of passenger and aircraft location throughout the travel time&#x000a;&#x000a;&#x0009;// if the passenger has no current flight his location is unknown, otherwise his location equals the location of the aircraft he is in&#x000a;&#x0009;all p: Passenger | (#getCurrentFlightForPassenger[p, time] = 0 =&gt; getPassengerLocation[time, p] = Unknown) and&#x000a;&#x0009;&#x0009;&#x0009;(#getCurrentFlightForPassenger[p, time] &gt; 0 =&gt;  getPassengerLocation[time, p] = getCurrentFlightForPassenger[p, time].aircraft)&#x000a;&#x0009;// ensure aircraft location is set correctly, function names self-explanatory &#x000a;&#x0009;all a: Aircraft | (#getCurrentFlightForAircraft[a, time] = 0 and #{f: a.flights | isBefore[getDeparture[f], time]} &gt; 0) =&gt; a_locations[a] = getDestination[getNextFlightFromTime[time, a]]&#x000a;&#x0009;all a: Aircraft | (#getCurrentFlightForAircraft[a, time] = 0 and #{f: a.flights | isBefore[getDeparture[f], time]} = 0) =&gt;&#x000a;&#x0009;&#x0009;&#x0009;a_locations[a] = getOrigin[{f1: a.flights | all f2: (a.flights - f1) | isBefore[getDeparture[f1], getDeparture[f2]]}]&#x000a;&#x0009;// if aircraft currently has a flight, its location is in air&#x000a;&#x0009;all a: Aircraft | (#getCurrentFlightForAircraft[a, time] &gt; 0 =&gt; a_locations[a] = InAir)&#x000a;}&#x000a;fact {&#x000a;&#x0009;// ensure states are unique in terms of time&#x000a;&#x0009;no disj s1, s2: State | s1.time = s2.time&#x000a;}&#x000a;pred timeStepState[s1, s2: State] {&#x000a;&#x0009;isBefore[s1.time, s2.time]&#x000a;}&#x000a;&#x000a;// small intermediate test&#x000a;pred show {#State = 5 and #Booking.flights = 1 and #Passenger = 1 and #State = #Time and #Flight = #Booking.flights}&#x000a;run show for 5&#x000a;&#x000a;/*&#x000a; * Predicates from Task B)&#x000a; */&#x000a;&#x000a;pred static_instance_1 {#Flight = 1 and #Aircraft = 1 and #Airline = 1 and #Passenger = 1 and #Seat = 1 and #Airport = 2}&#x000a;&#x000a;pred static_instance_2 { // min. for 6&#x000a;&#x0009;#Booking = 3 and all disj b1, b2: Booking | b1.category != b2.category&#x000a;&#x0009;#(Seat - BusinessSeat) = 2&#x000a;&#x0009;#(BusinessSeat - FirstClassSeat) = 2&#x000a;&#x0009;#FirstClassSeat = 2&#x000a;&#x0009;#Passenger = 2 and #Flight = 2 and #Airport = 2 and #Airline = 1&#x000a;}&#x000a;&#x000a;pred static_instance_3 { // Impossible because 3 flights over 2 airports implies that the first and last airports are not the same&#x000a;&#x0009;one r: RoundTrip | #r.flights = 3&#x000a;&#x0009;#Passenger = 1 and #Seat = 1 and #Airport = 2 and #Airline = 1&#x000a;}&#x000a;&#x000a;pred static_instance_4 { // min. for 6&#x000a;&#x0009;some disj b1, b2: Booking | #(b1.flights &amp; b2.flights) = 1 and&#x000a;&#x0009;&#x0009;&#x0009;getOrigin[getFirstFlight[b1]] != getOrigin[getFirstFlight[b2]] and&#x000a;&#x0009;&#x0009;&#x0009;getDestination[getLastFlight[b1]] != getDestination[getLastFlight[b2]]&#x000a;&#x0009;all f1, f2: Flight | f1.aircraft = f2.aircraft&#x000a;}&#x000a;&#x000a;pred static_instance_5 {&#x000a;&#x0009;one p: Passenger | one b: p.bookings | #getFlightsInBooking[b] = 3 and&#x000a;&#x0009;&#x0009;&#x0009;getFirstFlight[b].aircraft = getLastFlight[b].aircraft and&#x000a;&#x0009;&#x0009;&#x0009;#getFlightsInBooking[b].aircraft = 2&#x000a;&#x0009;#Passenger = 1 and #Aircraft = 2 and #Seat = 2 and #Airline = 1&#x000a;}&#x000a;&#x000a;run static_instance_4 for 6&#x000a;//run static_instance_1 for 7 but exactly 1 Flight, 1 Aircraft, 1 Airline, 1 Passenger, 1 Seat, 2 Airport&#x000a;&#x000a;/*&#x000a; * Static model: Predicates&#x000a; */&#x000a;&#x000a;// True iff t1 is strictly before t2.&#x000a;pred isBefore[t1, t2: Time] { t2 in t1.^after } // Since time is totally ordered, if not in transitiv closure, first time is before second&#x000a;&#x000a;/*&#x000a; * Static model: Functions&#x000a; */&#x000a;&#x000a;// Returns the departure time of the given flight.&#x000a;fun getDeparture[f: Flight]: Time { f.departure_time }&#x000a;// Returns the arrival time of the given flight.&#x000a;fun getArrival[f: Flight]: Time { f.arrival_time }&#x000a;// Returns the airport the given flight departs from.&#x000a;fun getOrigin[f: Flight]: Airport { f.departure_airport }&#x000a;// Returns the destination airport of the given flight. &#x000a;fun getDestination[f: Flight]: Airport { f.arrival_airport }&#x000a;// Returns the first flight of the given booking.&#x000a;fun getFirstFlight[b: Booking]: Flight { // only flight in set that has an earlier departure than every other flight in set&#x000a;&#x0009;{f: b.flights | all fl: (b.flights - f) | isBefore[getDeparture[f], getDeparture[fl]]}&#x000a;}&#x000a;// Returns the last flight of the given booking.&#x000a;fun getLastFlight[b: Booking]: Flight { // only flight in set that has an later departure than every other flight in set&#x000a;&#x0009;{f: b.flights | all fl: (b.flights - f) | isBefore[getDeparture[fl], getDeparture[f]]}&#x000a;}&#x000a;// Returns all seats of the given aircraft. &#x000a;fun getSeats[a: Aircraft]: set Seat { a.seats }&#x000a;// Returns all flights for which is given aircraft is used.&#x000a;fun getFlights[a: Aircraft]: set Flight { a.flights }&#x000a;// Returns all bookings booked by the given passenger.&#x000a;fun getBookings[p: Passenger]: set Booking { p.bookings }&#x000a;// Returns all flights contained in the given booking.&#x000a;fun getFlightsInBooking[b: Booking]: set Flight { b.flights }&#x000a;&#x000a;fun getLaterFlights[first: Flight, fs: Flight]: set Flight {&#x000a;&#x0009;{later: fs | isBefore[getDeparture[first], getDeparture[later]]}&#x000a;}&#x000a;fun getNextFlight[first: Flight, fs: Flight]: Flight{&#x000a;&#x0009;{n: getLaterFlights[first, fs] | all rest: (getLaterFlights[first, fs] - n) | isBefore[getDeparture[n], getDeparture[rest]]}&#x000a;}&#x000a;&#x000a;/*&#x000a; * Dynamic model: Functions&#x000a; */&#x000a;fun getCurrentFlightForPassenger[p: Passenger, time: Time]: Flight {&#x000a;&#x0009;{f: {b: Booking | p in b.passengers}.flights | not isBefore[time, getDeparture[f]] and (isBefore[time, getArrival[f]] or time = getArrival[f])}&#x000a;}&#x000a;fun getCurrentFlightForAircraft[a: Aircraft, time: Time]: Flight {&#x000a;&#x0009;{f: a.flights | isBefore[getDeparture[f], time] and isBefore[time, getArrival[f]]}&#x000a;}&#x000a;fun getLastAircraftLocation[t: Time, a: Aircraft]: AircraftLocation{&#x000a;&#x0009;getDestination[{f1: {f: a.flights | not isBefore[t, getArrival[f]]} | all f2: ({f3: a.flights | not isBefore[t, getArrival[f3]]} - f1) | isBefore[getArrival[f2], getArrival[f1]]}]&#x000a;}&#x000a;fun getNextFlightFromTime[t: Time, a: Aircraft]: Flight {&#x000a;&#x0009;{f1: {f: a.flights | not isBefore[t, getArrival[f]]} | all f2: ({f3: a.flights | not isBefore[t, getArrival[f3]]} - f1) | isBefore[getArrival[f2], getArrival[f1]]}&#x000a;}&#x000a;// Returns the state which comes after the given state.&#x000a;fun getNextState[s: State]: State {&#x000a;&#x0009;{s2: {s1: State | isBefore[s.time, s1.time]} | all s4: ({s3:State | isBefore[s.time, s3.time]} - s2) | isBefore[s2.time, s4.time]}&#x000a;}&#x000a;// Returns the location of the given passenger at the given time. &#x000a;fun getPassengerLocation[t: Time, p: Passenger]: PassengerLocation {&#x000a;&#x0009;{s1: State | s1.time = t}.p_locations[p]&#x000a;}&#x000a;// Returns the location of the given aircraft at the given time.&#x000a;fun getAircraftLocation[t: Time, ac: Aircraft]: AircraftLocation {&#x000a;&#x0009;{s1: State | s1.time = t}.a_locations[ac]&#x000a;}&#x000a;// Returns the time whose state the given State represents.&#x000a;fun getTime[s: State]: Time {&#x000a;&#x0009;s.time&#x000a;}&#x000a;&#x000a;/*&#x000a; * Predicates for Task D)&#x000a; */&#x000a;&#x000a;pred dynamic_instance_1 {&#x000a;&#x0009;// we check for two seperate points in time, i.e., for two different states, whether a passenger can be on different planes. &#x000a;&#x0009;one p: Passenger | some disj s1, s2: State | getCurrentFlightForPassenger[p, getTime[s1]].aircraft != getCurrentFlightForPassenger[p, getTime[s2]].aircraft&#x000a;&#x0009;#Flight = 3 and #Passenger = 1 and #RoundTrip = 1 and #Airport = 2&#x000a;}&#x000a;pred dynamic_instance_2 {&#x000a;&#x0009;// exactly one booking for all flights (in combination with the last line &quot;#Booking = 1&quot;)&#x000a;&#x0009;Booking.flights = Flight&#x000a;&#x0009;// At some time, i.e., State, we have an aircraft in the air and a passenger with an unknown location&#x000a;&#x0009;some s: State | some a: Aircraft, p: Passenger | s.p_locations[p] = Unknown and s.a_locations[a] = InAir&#x000a;&#x0009;#Booking = 1 and #Flight = 2&#x000a;}&#x000a;pred dynamic_instance_3 {&#x000a;&#x0009;// the two passengers always travel together&#x000a;&#x0009;some disj p1, p2: Passenger | all t: Time | getPassengerLocation[t, p1] = getPassengerLocation[t, p2]&#x000a;&#x0009;// one roundtrip and nothing else, and one normal booking&#x000a;&#x0009;one p1, p2: Passenger | (p1 in RoundTrip.passengers) and (#{b: Booking | p1 in b.passengers} = 1) and (p2 not in RoundTrip.passengers)&#x000a;&#x0009;#Booking = 3 and #Aircraft = 2 and #Airport = 2 and #Passenger = 2&#x000a;}&#x000a;&#x000a;run dynamic_instance_3 for 5&#x000a;"/>
+
+<source filename="/$alloy4$/models/util/integer.als" content="module util/integer&#x000a;&#x000a;/*&#x000a; * A collection of utility functions for using Integers in Alloy.&#x000a; * Note that integer overflows are silently truncated to the current bitwidth&#x000a; * using the 2&apos;s complement arithmetic, unless the &quot;forbid overfows&quot; option is&#x000a; * turned on, in which case only models that don&apos;t have any overflows are &#x000a; * analyzed. &#x000a; */&#x000a;&#x000a;fun add  [n1, n2: Int] : Int { this/plus[n1, n2] }&#x000a;fun plus [n1, n2: Int] : Int { n1 fun/add n2 }&#x000a;&#x000a;fun sub   [n1, n2: Int] : Int { this/minus[n1, n2] }&#x000a;fun minus [n1, n2: Int] : Int { n1 fun/sub n2 }&#x000a;&#x000a;fun mul [n1, n2: Int] : Int { n1 fun/mul n2 }&#x000a;&#x000a;/**&#x000a; * Performs the division with &quot;round to zero&quot; semantics, except the following 3 cases&#x000a; * 1) if a is 0, then it returns 0&#x000a; * 2) else if b is 0, then it returns 1 if a is negative and -1 if a is positive&#x000a; * 3) else if a is the smallest negative integer, and b is -1, then it returns a&#x000a; */&#x000a;fun div [n1, n2: Int] : Int { n1 fun/div n2 }&#x000a;&#x000a;/** answer is defined to be the unique integer that satisfies &quot;a = ((a/b)*b) + remainder&quot; */&#x000a;fun rem [n1, n2: Int] : Int { n1 fun/rem n2 }&#x000a;&#x000a;/** negate */&#x000a;fun negate [n: Int] : Int { 0 fun/sub n }&#x000a;&#x000a;/** equal to */&#x000a;pred eq [n1, n2: Int] { int[n1] = int[n2] }&#x000a;&#x000a;/** greater than */&#x000a;pred gt [n1, n2: Int] { n1 &gt; n2 }&#x000a;&#x000a;/** less then */&#x000a;pred lt [n1, n2: Int] { n1 &lt; n2 }&#x000a;&#x000a;/** greater than or equal */&#x000a;pred gte [n1, n2: Int] { n1 &gt;= n2 }&#x000a;&#x000a;/** less than or equal */&#x000a;pred lte [n1, n2: Int] { n1 &lt;= n2 }&#x000a;&#x000a;/** integer is zero */&#x000a;pred zero [n: Int] { n = 0 }&#x000a;&#x000a;/** positive */&#x000a;pred pos  [n: Int] { n &gt; 0 }&#x000a;&#x000a;/** negative */&#x000a;pred neg  [n: Int] { n &lt; 0 }&#x000a;&#x000a;/** non-positive */&#x000a;pred nonpos [n: Int] { n &lt;= 0 }&#x000a;&#x000a;/** non-negative */&#x000a;pred nonneg [n: Int] { n &gt;= 0 }&#x000a;&#x000a;/** signum (aka sign or sgn) */&#x000a;fun signum [n: Int] : Int { n&lt;0 =&gt; (0 fun/sub 1) else (n&gt;0 =&gt; 1 else 0) }&#x000a;&#x000a;/**&#x000a; * returns the ith element (zero-based) from the set s&#x000a; * in the ordering of &apos;next&apos;, which is a linear ordering&#x000a; * relation like that provided by util/ordering&#x000a; */&#x000a;fun int2elem[i: Int, next: univ-&gt;univ, s: set univ] : lone s {&#x000a;  {e: s | #^next.e = int i }&#x000a;}&#x000a;&#x000a;/**&#x000a; * returns the index of the element (zero-based) in the&#x000a; * ordering of next, which is a linear ordering relation&#x000a; * like that provided by util/ordering&#x000a; */&#x000a;fun elem2int[e: univ, next: univ-&gt;univ] : lone Int {&#x000a;  Int[#^next.e]&#x000a;}&#x000a;&#x000a;/** returns the largest integer in the current bitwidth */&#x000a;fun max:one Int { fun/max }&#x000a;&#x000a;/** returns the smallest integer in the current bitwidth */&#x000a;fun min:one Int { fun/min }&#x000a;&#x000a;/** maps each integer (except max) to the integer after it */&#x000a;fun next:Int-&gt;Int { fun/next }&#x000a;&#x000a;/** maps each integer (except min) to the integer before it */&#x000a;fun prev:Int-&gt;Int { ~next }&#x000a;&#x000a;/** given a set of integers, return the largest element */&#x000a;fun max [es: set Int]: lone Int { es - es.^prev }&#x000a;&#x000a;/** given a set of integers, return the smallest element */&#x000a;fun min [es: set Int]: lone Int { es - es.^next }&#x000a;&#x000a;/** given an integer, return all integers prior to it */&#x000a;fun prevs [e: Int]: set Int { e.^prev }&#x000a;&#x000a;/** given an integer, return all integers following it */&#x000a;fun nexts [e: Int]: set Int { e.^next }&#x000a;&#x000a;/** returns the larger of the two integers */&#x000a;fun larger [e1, e2: Int]: Int { let a=int[e1], b=int[e2] | (a&lt;b =&gt; b else a) }&#x000a;&#x000a;/** returns the smaller of the two integers */&#x000a;fun smaller [e1, e2: Int]: Int { let a=int[e1], b=int[e2] | (a&lt;b =&gt; a else b) }&#x000a;"/>
+
+</alloy>
