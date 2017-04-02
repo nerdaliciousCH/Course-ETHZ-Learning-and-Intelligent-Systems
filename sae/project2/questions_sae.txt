@@ -6,3 +6,6 @@ Questions SAE assistants:
   --> if yes are we allowed to use enums instead?
 - Does the person doing the booking have to fly with it too?
 - Are Airport.code, Airline.name, Booking.ID, etc. unique? Must this be modeled?
+
+new Important shit:
+- not allowed that same person is twice in same booking or has two bookings for same flight.
