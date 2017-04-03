@@ -35,9 +35,10 @@ def main():
     #x_test = normalize(x_test, axis=0)
 
     #Lasso(alpha=1.0, fit_intercept=True, normalize=False, precompute=False, copy_X=True, max_iter=1000, tol=0.0001, warm_start=False, positive=False, random_state=None, selection='cyclic')
+    #LassoLars(alpha=1.0, fit_intercept=True, verbose=False, normalize=True, precompute='auto', max_iter=500, eps=2.2204460492503131e-16, copy_X=True, fit_path=True, positive=False)
 
-    param_grid = [{'alpha':np.logspace(-3, 1, 1000)}]
-    model = GridSearchCV(linear_model.Lasso(), param_grid, cv=10, scoring=None, fit_params=None, n_jobs=-1, iid=True, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
+    param_grid = [{'alpha':np.logspace(-4, 10, 1000)}]
+    model = GridSearchCV(linear_model.LassoLars(), param_grid, cv=5, scoring=None, fit_params=None, n_jobs=-1, iid=True, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
 
     print("Training...")
     model.fit(x_train, y_train)
