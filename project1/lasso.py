@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from sklearn import linear_model, grid_search
+from sklearn import linear_model, grid_search, svm
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import normalize, PolynomialFeatures
 from sklearn.model_selection import GridSearchCV, train_test_split
@@ -31,13 +31,8 @@ def main():
     x_train, x_validate, y_train, y_validate = train_test_split(X, Y, test_size=0.1)
 
 
-    #X = normalize(X, axis=0)
-    #x_test = normalize(x_test, axis=0)
-
-    #Lasso(alpha=1.0, fit_intercept=True, normalize=False, precompute=False, copy_X=True, max_iter=1000, tol=0.0001, warm_start=False, positive=False, random_state=None, selection='cyclic')
-
-    param_grid = [{'alpha':np.logspace(-3, 1, 1000)}]
-    model = GridSearchCV(linear_model.Lasso(), param_grid, cv=10, scoring=None, fit_params=None, n_jobs=-1, iid=True, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
+    param_grid = [{'alpha':np.linspace(0.23, 0.36, 30)}]
+    model = GridSearchCV(linear_model.Lasso(), param_grid, cv=20, scoring=None, fit_params=None, n_jobs=-1, iid=False, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
 
     print("Training...")
     model.fit(x_train, y_train)
