@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
@@ -10,7 +10,7 @@ def main():
     np.random.seed(0)
 
     print("Loading data...")
-    
+
     # load the data from the CSV files
     train_data = pd.read_csv('train.csv', header=0)
     test_data = pd.read_csv('test.csv', header=0)
@@ -36,9 +36,9 @@ def main():
     model.fit(x_train, y_train)
 
     # print mean squared error as first estimate
-    RMSE = mean_squared_error(y_validate, model.predict(x_validate))**0.5
-    print "Root median square error:"
-    print RMSE
+    acc = accuracy_score(y_validate, model.predict(x_validate))
+    print "Categorisation accuracy:"
+    print acc
 
     print("Predicting...")
 
@@ -54,4 +54,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
