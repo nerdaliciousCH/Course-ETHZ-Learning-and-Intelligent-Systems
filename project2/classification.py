@@ -26,7 +26,9 @@ def main():
     # split for validation testing
     x_train, x_validate, y_train, y_validate = train_test_split(X, Y)
 
-    model = RandomForestClassifier()
+
+    param_grid = [{'alpha':np.linspace(0.23, 0.36, 30)}]
+    model = GridSearchCV(RandomForestClassifier(), param_grid, cv=20, scoring=None, fit_params=None, n_jobs=-1, iid=False, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
 
 
     print("Training...")
