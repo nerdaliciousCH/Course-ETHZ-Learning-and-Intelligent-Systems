@@ -2,7 +2,9 @@ import pandas as pd
 import numpy as np
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn import linear_model
 
 def main():
     # set seed for reproducibility
@@ -32,9 +34,18 @@ def main():
     # random_state=None, verbose=0, warm_start=False, 
     # class_weight=None)
 
-    param_grid = [{'n_estimators':map(int, np.linspace(1, 1000, 100)),'criterion':['gini','entropy'],'max_features':['log2','sqrt'],'class_weight':['balanced_subsample','balanced']}]
-    model = GridSearchCV(RandomForestClassifier(), param_grid, cv=20, scoring=None, fit_params=None, n_jobs=-1, iid=False, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
+    #param_grid = [{'n_estimators':map(int, np.linspace(1, 1000, 1000)),'criterion':['gini','entropy'],'max_features':['log2','sqrt'],'class_weight':['balanced_subsample','balanced']}]
+    #model = GridSearchCV(RandomForestClassifier(), param_grid, cv=20, scoring=None, fit_params=None, n_jobs=-1, iid=False, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
 
+    #param_grid = [{'n_neighbors':map(int, np.linspace(1, 100, 100)),'algorithm':['ball_tree','kd_tree'],'weights':['uniform','distance']}]
+    #model = GridSearchCV(KNeighborsClassifier(), param_grid, cv=20, scoring=None, fit_params=None, n_jobs=-1, iid=False, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
+    
+
+    # Cs=10, fit_intercept=True, cv=None, dual=False, penalty='l2', scoring=None, solver='lbfgs', 
+    # tol=0.0001, max_iter=100, class_weight=None, n_jobs=1, verbose=0, refit=True, 
+    # intercept_scaling=1.0, multi_class='ovr', random_state=None
+    #  Cs values are chosen in a logarithmic scale between 1e-4 and 1e4
+    model = linear_model.LogisticRegressionCV()
 
     print("Training...")
 
