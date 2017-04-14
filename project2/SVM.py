@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn import linear_model, svm
 from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import normalize, PolynomialFeatures
 from sklearn.model_selection import GridSearchCV, train_test_split
 
 
@@ -22,6 +23,11 @@ def main():
     t_id = test_data['Id']
     x_test = test_data.drop('Id', axis=1)
 
+    # transform data
+    poly = PolynomialFeatures(degree=2, interaction_only=False, include_bias=True)
+    X = poly.fit_transform(np.array(X))
+    x_test = poly.fit_transform(np.array(x_test))
+
     # split for validation testing
     x_train, x_validate, y_train, y_validate = train_test_split(X, Y)
 
@@ -38,8 +44,8 @@ def main():
 
     #SVC(C=1.0, kernel='rbf', degree=3, gamma='auto', coef0=0.0, shrinking=True, probability=False, tol=0.001, cache_size=200, class_weight=None, verbose=False, max_iter=-1, decision_function_shape=None, random_state=None)
 
-    param_grid = [{'C':np.logspace(-10, 10, 2), 'kernel': ['poly', 'rbf'], 'degree':np.linspace(2, 2, 1)}]
-    model = GridSearchCV(svm.SVC(), param_grid, cv=5, scoring=None, fit_params=None, n_jobs=4, iid=True, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
+    param_grid = [{'C':np.logspace(-5, 2, 200), 'kernel': ['rbf', 'sigmoid', 'linear']}]
+    model = GridSearchCV(svm.SVC(max_iter=1e6), param_grid, cv=5, scoring=None, fit_params=None, n_jobs=6, iid=True, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
 
     #model = svm.SVR(kernel='poly', degree=5, gamma='auto', coef0=0.0, tol=0.001, C=1.0, epsilon=0.1, shrinking=True, cache_size=200, verbose=False, max_iter=-1)
 
