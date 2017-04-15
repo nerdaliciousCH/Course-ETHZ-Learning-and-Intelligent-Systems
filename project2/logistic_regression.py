@@ -37,7 +37,8 @@ def main():
     
 
     # Linear Regression
-    param_grid = [{'C':map(float, np.linspace(0., 100, 300)),'max_iter':map(int, np.linspace(100, 1000, 100)),'solver':['lbfgs','sag','newton-cg']}]
+    #'C':map(float, np.linspace(0.1, 10, 100))
+    param_grid = [{'C':map(float, np.linspace(0.1, 10, 10)),'max_iter':map(int, np.linspace(100, 1000, 50)),'solver':['lbfgs','sag','newton-cg']}]
     model = GridSearchCV(linear_model.LogisticRegression(), param_grid, cv=20, scoring=None, fit_params=None, n_jobs=-1, iid=False, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
 
     print("Training...")
