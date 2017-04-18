@@ -25,7 +25,7 @@ def main():
     x_test = test_data.drop('Id', axis=1)
 
     # split for validation testing
-    x_train, x_validate, y_train, y_validate = train_test_split(X, Y)
+    x_train, x_validate, y_train, y_validate = train_test_split(X, Y, test_size = 0.1)
 
     # Random Forest Classifier
     #param_grid = [{'n_estimators':map(int, np.linspace(1, 1000, 1000)),'criterion':['gini','entropy'],'max_features':['log2','sqrt'],'class_weight':['balanced_subsample','balanced']}]
@@ -38,8 +38,8 @@ def main():
 
     # Linear Regression
     #'C':map(float, np.linspace(0.1, 10, 100))
-    param_grid = [{'C':map(float, np.linspace(0.1, 10, 10)),'max_iter':map(int, np.linspace(100, 1000, 50)),'solver':['lbfgs','sag','newton-cg']}]
-    model = GridSearchCV(linear_model.LogisticRegression(), param_grid, cv=20, scoring=None, fit_params=None, n_jobs=-1, iid=False, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
+    param_grid = [{'C':map(float, np.linspace(0.1, 10, 10)),'max_iter':[300],'solver':['newton-cg']}]
+    model = GridSearchCV(linear_model.LogisticRegression(multi_class='multinomial'), param_grid, cv=20, scoring=None, fit_params=None, n_jobs=-1, iid=False, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
 
     print("Training...")
 

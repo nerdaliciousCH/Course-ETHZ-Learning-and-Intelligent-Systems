@@ -1,9 +1,14 @@
 import pandas as pd
 import numpy as np
+from sklearn import preprocessing
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split, RandomizedSearchCV, GridSearchCV
+from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.gaussian_process.kernels import RBF
+from sklearn.preprocessing import StandardScaler
 from sklearn.neural_network import MLPClassifier
-from sklearn.preprocessing import normalize, PolynomialFeatures
+
+
 
 def main():
     # set seed for reproducibility
@@ -23,20 +28,23 @@ def main():
     t_id = test_data['Id']
     x_test = test_data.drop('Id', axis=1)
 
-    # transform data
-    poly = PolynomialFeatures(degree=3, interaction_only=False, include_bias=True)
-    X = poly.fit_transform(np.array(X))
-    x_test = poly.fit_transform(np.array(x_test))
+    # normalize/scale data
+    scaler = preprocessing.StandardScaler().fit(X)
+    X = scaler.transform(X)
+    x_test = scaler.transform(x_test)
 
     # split for validation testing
     x_train, x_validate, y_train, y_validate = train_test_split(X, Y, test_size=0.1)
 
+    '''
     param_grid = {'max_iter':[100,200,300],'activation':['identity','logistic','tanh','relu'],
                     'solver':['lbfgs','sgd','adam'],'learning_rate':['constant','invscaling','adaptive'], 
                     'hidden_layer_sizes':[(100,),(100,10),(100,100)]}
 
     model = RandomizedSearchCV(MLPClassifier(), param_grid, cv=20, scoring=None, fit_params=None, n_jobs=-1, iid=False, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
+    '''
 
+    model = GaussianProcessClassifier(1.0 * RBF(1.0), warm_start=True)
     print("Training...")
 
     # model is trained on the training data extracted from csv
