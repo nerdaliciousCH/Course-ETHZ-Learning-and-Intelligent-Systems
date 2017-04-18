@@ -12,6 +12,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.mixture import GaussianMixture
+from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.gaussian_process.kernels import RBF
 
 def main():
     # set seed for reproducibility
@@ -31,6 +33,10 @@ def main():
     t_id = test_data['Id']
     x_test = test_data.drop('Id', axis=1)
 
+    scaler = preprocessing.StandardScaler().fit(X)
+    X = scaler.transform(X)
+    x_test = scaler.transform(x_test)
+
 
     x_train, x_validate, y_train, y_validate = train_test_split(X, Y, test_size=0.1)
 
@@ -40,21 +46,17 @@ def main():
 
     # try all & use voting 
     clf1 = KNeighborsClassifier(n_neighbors=5,weights='distance')
-    clf2 = svm.SVC(kernel="linear", C=1, gamma=1)
-    clf3 = svm.SVC(C=1, gamma=1, kernel='poly', degree=3)
-    clf4 = svm.SVC(C=1, gamma=1, kernel='rbf')
-    clf5 = svm.SVC(C=1, gamma=1, kernel='poly', degree=2)
+    clf3 = svm.SVC(C=0.0011119677311206978, kernel='poly', degree=2, probability=True)
+    #clf4 = svm.SVC(C=1, gamma=1, kernel='rbf', probability=True)
     clf6 = DecisionTreeClassifier(criterion='gini', max_depth=5)
     clf7 = RandomForestClassifier(max_depth=5, n_estimators=100, max_features=2)
     clf8 = AdaBoostClassifier(n_estimators=100)
-    clf9 = GaussianNB()
-    clf10 = GaussianMixture(covariance_type='tied', init_params='wc', n_iter=20)
+    clf9 = GaussianProcessClassifier(1.0 * RBF(1.0), warm_start=True)
+    #clf9 = GaussianNB()
+    clf4 = GaussianMixture(covariance_type='tied')
 
 
-    model = VotingClassifier(estimators=[('k_n',clf1), ('svc1',clf2), ('svc2',clf3), 
-    									 ('svc3',clf4), ('svc4',clf5), ('dt',clf6), 
-    									 ('rt',clf7), ('AdaBoost',clf8), ('gnb',clf9), 
-    									 ('gmm', clf10)], voting = 'soft')
+    model = VotingClassifier(estimators=[('k_n',clf1), ('svc1',clf3), ('svc2',clf4), ('dt', clf6), ('rf', clf7), ('abg', clf8), ('gpc',clf9)], voting = 'hard')
 
 
     print("Training...")
