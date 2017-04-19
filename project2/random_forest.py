@@ -27,26 +27,22 @@ def main():
     x_test = test_data.drop('Id', axis=1)
 
     # split for validation testing
-    x_train, x_validate, y_train, y_validate = train_test_split(X, Y)
+    x_train, x_validate, y_train, y_validate = train_test_split(X, Y, test_size=0.05)
 
     # Random Forest Classifier
-    #param_grid = [{'n_estimators':map(int, np.linspace(1, 1000, 1000)),'criterion':['gini','entropy'],'max_features':['log2','sqrt'],'class_weight':['balanced_subsample','balanced']}]
-    #model = GridSearchCV(RandomForestClassifier(), param_grid, cv=20, scoring=None, fit_params=None, n_jobs=-1, iid=False, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
-
-    # KNeighbors 
-    #param_grid = [{'n_neighbors':map(int, np.linspace(1, 100, 100)),'algorithm':['ball_tree','kd_tree'],'weights':['uniform','distance']}]
-    #model = GridSearchCV(KNeighborsClassifier(), param_grid, cv=20, scoring=None, fit_params=None, n_jobs=-1, iid=False, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
-    
-
-    # Linear Regression
-    param_grid = [{'C':map(float, np.linspace(0., 100, 300)),'max_iter':map(int, np.linspace(100, 1000, 100)),'solver':['lbfgs','sag','newton-cg']}]
-    model = GridSearchCV(linear_model.LogisticRegression(), param_grid, cv=20, scoring=None, fit_params=None, n_jobs=-1, iid=False, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
+    param_grid = [{'n_estimators':[50,55,60,63,65,68,70],'criterion':['entropy'],'max_features':['log2','sqrt',None],'class_weight':['balanced_subsample']}]
+    model = GridSearchCV(RandomForestClassifier(), param_grid, cv=20, scoring=None, fit_params=None, n_jobs=-1, iid=False, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
 
     print("Training...")
 
     # model is trained on the training data extracted from csv
     #model = GridSearchCV(models, parameters)
     model.fit(x_train, y_train)
+
+    best_estimator = model.best_estimator_
+
+    print 'Best score of Grid Search: ' + str(model.best_score_)
+    print 'Best params of Grid Search: ' + str(model.best_params_)
 
     # print mean squared error as first estimate
     acc = accuracy_score(y_validate, model.predict(x_validate))
