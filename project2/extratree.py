@@ -3,7 +3,9 @@ import numpy as np
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split, RandomizedSearchCV, GridSearchCV
 from sklearn.preprocessing import normalize, PolynomialFeatures
+import sklearn.preprocessing as preprocessing
 from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.decomposition import PCA
 
 def main():
     # set seed for reproducibility
@@ -23,21 +25,25 @@ def main():
     t_id = test_data['Id']
     x_test = test_data.drop('Id', axis=1)
 
-    # transform data
-    #poly = PolynomialFeatures(degree=3, interaction_only=False, include_bias=True)
-    #X = poly.fit_transform(np.array(X))
-    #x_test = poly.fit_transform(np.array(x_test))
+    # scale to unit variance
+    scaler = preprocessing.StandardScaler().fit(X)
+    X = scaler.transform(X)
+    x_test = scaler.transform(x_test)
+    # now take the 2 feature dimension which have most impact on class label
+    pca = PCA(n_components=2)
+    pca.fit(x_test)
+    pca.fit(X)
 
     # split for validation testing
     x_train, x_validate, y_train, y_validate = train_test_split(X, Y, test_size=0.1)
 
-    param_grid = {'n_estimators':[500],
-                'criterion':["gini", "entropy"],
+    param_grid = {'n_estimators':[100,200,300,400,500,600,700],
+                'criterion':["entropy"],
                 'max_features':["sqrt"],
-                    'min_samples_split':[2,3,4]
+                    'min_samples_split':[2,3,4,5]
                     }
 
-    model = GridSearchCV(ExtraTreesClassifier(), param_grid, cv=5, scoring=None, fit_params=None, n_jobs=-1, iid=False, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
+    model = GridSearchCV(ExtraTreesClassifier(), param_grid, cv=12, scoring=None, fit_params=None, n_jobs=-1, iid=False, refit=True, verbose=1, pre_dispatch='2*n_jobs', error_score='raise', return_train_score=True)
     # model = ExtraTreesClassifier(n_estimators=500, max_depth=None, min_samples_split=3, random_state=0, n_jobs = 32)
     print("Training...")
     # model is trained on the training data extracted from csv
