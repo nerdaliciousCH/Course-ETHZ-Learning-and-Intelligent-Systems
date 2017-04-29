@@ -7,17 +7,21 @@ import sklearn.model_selection as sk
 
 
 def main():
+
+    # read input data from hd5 format
     train = pd.read_hdf("train.h5", "train")
     predict = pd.read_hdf("test.h5", "test")
 
-    Y=train.iloc[0:,0]
-    X=train.iloc[0:,1:]
-    X_predict=predict.iloc[0:,0:]
-    t_id=predict.index.values
+    # create matrices from input
+    Y = train.iloc[0:,0]
+    X = train.iloc[0:,1:]
+    X_predict = predict.iloc[0:,0:]
+    t_id = predict.index.values
 
-    Y=np.array(Y.values).astype('int')
-    X=np.array(X.values).astype('double')
-    X_predict=np.array(X_predict.values).astype('double')
+    # type conversion
+    Y = np.array(Y.values).astype('int')
+    X = np.array(X.values).astype('double')
+    X_predict = np.array(X_predict.values).astype('double')
 
     X_train, X_test, Y_train, Y_test = sk.train_test_split(X,Y,test_size=0.05, random_state=42)
 
@@ -25,7 +29,7 @@ def main():
     #tf.logging.set_verbosity(tf.logging.INFO)
     tf.logging.set_verbosity(tf.logging.ERROR)
 
-    # Train
+    # train
     feature_columns = [tf.contrib.layers.real_valued_column("", dimension=100)]
 
     # tanh and softsign are the best activation functions so far
@@ -56,10 +60,9 @@ def main():
     accuracy = accuracy_score(Y_test, list(classifier.predict(X_test)))
     print('Accuracy: {0:f}'.format(accuracy))
 
-    # Predict
+    # make the prediction
     print("Making predictions...")
     predictions = list(classifier.predict(X_predict))
-
 
     results_df = pd.DataFrame(data={'y':predictions})
     joined = pd.DataFrame({'Id':t_id}).join(results_df)
