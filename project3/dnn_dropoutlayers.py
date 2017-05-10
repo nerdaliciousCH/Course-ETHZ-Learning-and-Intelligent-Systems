@@ -69,6 +69,7 @@ def main():
     correct_prediction = tf.equal(tf.argmax(y_conv,1), tf.argmax(y_,1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
     sess.run(tf.global_variables_initializer())
+<<<<<<< Updated upstream
     # TODO change this to real max entries of train set
     batchsize = 100
     for j in range(2000):
@@ -76,6 +77,17 @@ def main():
       start = i*batchsize
       end = min((i+1)*batchsize, Y_trainf.shape[0])
       batch = (X_train[start:end], Y_trainf[start:end])
+||||||| ancestor
+    # range(100) should be range(20000), run this at home
+    for i in range(1000):
+        # TODO THIS CALL SHOULD FRIGGIN WORK OR YOU ALL DIE
+      batch = next_batch(X_train, Y_train, 0, i)
+=======
+    # range(100) should be range(20000), run this at home
+    for i in range(1000):
+        # TODO THIS CALL SHOULD FRIGGIN WORK OR YOU ALL DIE
+      batch = next_batch(X_train, Y_train, 0, 100)
+>>>>>>> Stashed changes
       if i%100 == 0:
         train_accuracy = accuracy.eval(feed_dict={
             x:batch[0], y_: batch[1]})
